@@ -1,0 +1,16 @@
+table.worksheet {
+    border: 1px solid gray;
+    border-collapse: collapse;
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    font-size: 0.8em;
+}
+
+table.worksheet td {
+    border: 1px solid gray;
+    min-width: 10em;
+}
+
+table.worksheet input {
+    border: none;
+    font-size:  inherit;
+}
