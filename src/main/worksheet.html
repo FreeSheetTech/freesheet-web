@@ -6,9 +6,19 @@
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/freesheet.js"></script>
     <script src="js/worksheet/TableWorksheet.js"></script>
+    <script src="js/worksheet/FileUtils.js"></script>
+    <script src="js/lib/FileSaver.js"></script>
     <title>Freesheet</title>
 </head>
 <body>
+    <p>
+        Load file <input id="load" type="file"/>
+    </p>
+    <p>
+        <input id="name" type="text"/>
+        <button id="save">Save</button>
+    </p>
+
     <table id="sheet" class="worksheet">
         <tr>
             <td><input type="text"/></td>
@@ -37,6 +47,6 @@
         </tr>
     </table>
 
-    <script>new TableWorksheet($('#sheet'), function(name, value) { console.log("Change: " + name + " = " + value);}) </script>
+    <script src="js/worksheet/worksheet.js"></script>
 </body>
 </html>

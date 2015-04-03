@@ -9,21 +9,93 @@
   PageFunctions = require('page-functions');
 
   TableWorksheet = (function() {
+    var namedFormulasFromText;
+
+    namedFormulasFromText = function(text) {
+      var line, lines, splitLine, _i, _len, _results;
+      lines = text.split('\n');
+      splitLine = function(line) {
+        var parts;
+        parts = line.split('=');
+        return {
+          name: parts[0],
+          formula: parts[1]
+        };
+      };
+      _results = [];
+      for (_i = 0, _len = lines.length; _i < _len; _i++) {
+        line = lines[_i];
+        _results.push(splitLine(line));
+      }
+      return _results;
+    };
+
     function TableWorksheet(el, changeCallback) {
       this.el = el;
+      this.changeCallback = changeCallback;
+      this.initRunnerFromTable();
+    }
+
+    TableWorksheet.prototype.initRunnerFromTable = function() {
       this.runner = new ReactiveRunner();
-      this.runner.onChange(changeCallback);
+      this.runner.onChange(this.changeCallback);
       this.runner.addProvidedStreams(PageFunctions);
-      this._parseTable(this.runner);
       this.runner.onChange((function(_this) {
         return function(name, value) {
           return _this._updateTable(name, value);
         };
       })(this));
-    }
+      return this._parseTable();
+    };
 
-    TableWorksheet.prototype._parseTable = function(runner) {
-      var parseFormula, sheetRows, updateFormula;
+    TableWorksheet.prototype.asText = function() {
+      var sheetRows, text;
+      sheetRows = this.el.find('tr');
+      text = '';
+      sheetRows.each(function() {
+        var cells, formula, formulaEl, name, nameEl, rowEl;
+        rowEl = $(this);
+        cells = rowEl.find('td');
+        nameEl = cells.eq(0).find('input');
+        name = nameEl.val().trim();
+        formulaEl = cells.eq(1).find('input');
+        formula = formulaEl.val().trim();
+        if (name && formula) {
+          return text += name + ' = ' + formula + ';' + '\n';
+        }
+      });
+      return text;
+    };
+
+    TableWorksheet.prototype.clear = function() {
+      this.el.find('input').val('');
+      return this.el.find('td:nth-child(3)').text('');
+    };
+
+    TableWorksheet.prototype.loadText = function(text) {
+      var nf, r, _i, _len, _ref;
+      this.clear();
+      _ref = namedFormulasFromText(text);
+      for (r = _i = 0, _len = _ref.length; _i < _len; r = ++_i) {
+        nf = _ref[r];
+        this.loadRow(r, nf.name, nf.formula);
+      }
+      return this.initRunnerFromTable();
+    };
+
+    TableWorksheet.prototype.loadRow = function(rowIndex, name, formula) {
+      var cells, formulaEl, nameEl, rowEl;
+      rowEl = this.el.find("tr").eq(rowIndex);
+      cells = rowEl.find('td');
+      nameEl = cells.eq(0).find('input');
+      nameEl.val(name);
+      formulaEl = cells.eq(1).find('input');
+      return formulaEl.val(formula);
+    };
+
+    TableWorksheet.prototype._parseTable = function() {
+      var parseFormula, runner, sheetRows, updateFormula;
+      runner = this.runner;
       parseFormula = function(name, formula) {
         return new TextParser("" + name + " = " + formula).functionDefinition();
       };
