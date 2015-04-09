@@ -1,0 +1,11 @@
+To Do
+=====
+
+- Move text to TextRunner
+- ReactiveRunner to destroy functions when unloaded
+- Remove semicolons when text loaded into table
+- Table widget
+- Expand table
+- Show complex types better - table
+- Tidy up load/save
+- Test in other browsers

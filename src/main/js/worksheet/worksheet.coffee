@@ -3,5 +3,10 @@ $ ->
   fileUtils = window.fileUtils = new FileUtils();
 
   $('#save').on 'click', -> fileUtils.save worksheet.asText(), $('#name').val()
+
   loadFile = $('#load')
-  loadFile.on 'change', -> fileUtils.load loadFile.get(0).files[0], (text) -> worksheet.loadText text
+  fileLoaded = (file, text) ->
+    worksheet.loadText text
+    $('#name').val(file.name)
+
+  loadFile.on 'change', -> fileUtils.load loadFile.get(0).files[0], fileLoaded
