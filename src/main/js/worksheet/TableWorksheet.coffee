@@ -1,64 +1,44 @@
 ReactiveRunner = require('reactive-runner')
+TextLoader = require('text-loader')
 TextParser = require('text-parser')
 PageFunctions = require('page-functions')
 
 
 class TableWorksheet
 
-  namedFormulasFromText = (text) ->
-    lines = text.split '\n'
-    splitLine = (line) ->
-      parts = line.split '='
-      {name: parts[0], formula: parts[1]}
-
-    (splitLine line for line in lines)
-
-
   constructor: (@el, @changeCallback) ->
-    @initRunnerFromTable()
-
-  initRunnerFromTable: ->
     @runner = new ReactiveRunner()
     @runner.onChange @changeCallback
     @runner.addProvidedStreams PageFunctions
     @runner.onChange (name, value) => @_updateTable name, value
+    @loader = new TextLoader(@runner)
     @_parseTable()
 
-  asText: ->
-    sheetRows = @el.find('tr')
-    text = ''
-    sheetRows.each ->
-      rowEl = $(this)
-      cells = rowEl.find('td')
-      nameEl = cells.eq(0).find('input')
-      name  = nameEl.val().trim()
-      formulaEl = cells.eq(1).find('input')
-      formula  = formulaEl.val().trim()
-      if name and formula then text += name + ' = ' + formula + ';' + '\n'
-
-    text
+  asText: -> @loader.asText()
 
   clear: ->
+    @loader.clear()
     @el.find('input').val ''
     @el.find('td:nth-child(3)').text ''
 
   loadText: (text) ->
     @clear()
-    @loadRow r, nf.name, nf.formula for nf, r in namedFormulasFromText text
-    @initRunnerFromTable()
+    @_loadTable @loader.parseDefinitions(text)
+    @loader.loadDefinitions text
 
   loadRow: (rowIndex, name, formula) ->
-    rowEl = @el.find("tr").eq(rowIndex)
+    rowEl = @el.find("tbody tr").eq(rowIndex)
     cells = rowEl.find('td')
     nameEl = cells.eq(0).find('input')
     nameEl.val name
     formulaEl = cells.eq(1).find('input')
     formulaEl.val formula
 
+  _loadTable: (defs) -> @loadRow(i, def.name, def.expr.text) for def, i in defs
+
   _parseTable:  ->
-    runner = @runner
-    parseFormula = (name, formula) -> new TextParser("#{name} = #{formula}").functionDefinition()
-    updateFormula = (name, formula) -> if name and formula then runner.addUserFunction parseFormula(name, formula)
+    loader = @loader
+    updateFormula = (name, formula) -> if name and formula then loader.setFunctionAsText name, formula
 
     sheetRows = @el.find('tr')
     sheetRows.each ->
