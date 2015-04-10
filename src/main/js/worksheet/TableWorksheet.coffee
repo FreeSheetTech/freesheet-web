@@ -19,15 +19,10 @@ class TableWorksheet
     self = this
     @el.on 'change', 'td', (evt, newValue) ->
       cell = $(this)
-      rowEl = cell.parent()
-      cells = rowEl.find('td')
-      nameEl = cells.eq(0)
-      name  = nameEl.text().trim()
-      formulaEl = cells.eq(1)
-      formula  = formulaEl.text().trim()
-      self.updateFormula name, formula
+      row = new Row(cell.parent())
+      self.updateFormula row.name(), row.formula()
 
-  updateFormula: (name, formula) -> if name and formula then @loader.setFunctionAsText name, formula
+  updateFormula: (name, formula, oldName) -> if name and formula then @loader.setFunctionAsText name, formula, oldName
 
 
   asText: -> @loader.asText()
@@ -43,12 +38,9 @@ class TableWorksheet
     @loader.loadDefinitions text
 
   loadRow: (rowIndex, name, formula) ->
-    rowEl = @el.find("tbody tr").eq(rowIndex)
-    cells = rowEl.find('td, th')
-    nameEl = cells.eq(0)
-    nameEl.text name
-    formulaEl = cells.eq(1)
-    formulaEl.text formula
+    row = new Row(@el.find("tbody tr").eq(rowIndex))
+    row.setName name
+    row.setFormula formula
 
   _loadTable: (defs) -> @loadRow(i, def.name, def.expr.text) for def, i in defs
 
@@ -56,17 +48,24 @@ class TableWorksheet
     sheetRows = @el.find('tr')
     self = this
     sheetRows.each ->
-      rowEl = $(this)
-      cells = rowEl.find('td, th')
-      nameEl = cells.eq(0)
-      name  = nameEl.text().trim()
-      formulaEl = cells.eq(1)
-      formula  = formulaEl.text().trim()
-      self.updateFormula name, formula
+      row = new Row($(this))
+      self.updateFormula row.name(), row.formula()
 
   _updateTable: (name, value) ->
     valueCellForName = @el.find('td:first-child').filter( -> $(this).text() == name).closest('tr').find('th:nth-child(3)')
     valueCellForName.text(value)
+
+class Row
+  constructor: (@rowEl) ->
+
+  _nameCell: -> @rowEl.find('td').eq(0)
+  _formulaCell: -> @rowEl.find('td').eq(1)
+  _valueCell: -> @rowEl.find('th')
+  name: -> @_nameCell().text().trim()
+  formula: -> @_formulaCell().text().trim()
+  setName: (name) -> @_nameCell().text(name)
+  setFormula: (name) -> @_formulaCell().text(name)
+  setValue: (value) -> @_valueCell().text(value)
 
 #module.exports = TableWorksheet
 window.TableWorksheet = TableWorksheet
