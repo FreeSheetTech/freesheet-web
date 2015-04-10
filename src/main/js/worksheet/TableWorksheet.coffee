@@ -13,6 +13,22 @@ class TableWorksheet
     @runner.onChange (name, value) => @_updateTable name, value
     @loader = new TextLoader(@runner)
     @_parseTable()
+    @_handleEvents()
+
+  _handleEvents: ->
+    self = this
+    @el.on 'change', 'td', (evt, newValue) ->
+      cell = $(this)
+      rowEl = cell.parent()
+      cells = rowEl.find('td')
+      nameEl = cells.eq(0)
+      name  = nameEl.text().trim()
+      formulaEl = cells.eq(1)
+      formula  = formulaEl.text().trim()
+      self.updateFormula name, formula
+
+  updateFormula: (name, formula) -> if name and formula then @loader.setFunctionAsText name, formula
+
 
   asText: -> @loader.asText()
 
@@ -29,31 +45,27 @@ class TableWorksheet
   loadRow: (rowIndex, name, formula) ->
     rowEl = @el.find("tbody tr").eq(rowIndex)
     cells = rowEl.find('td')
-    nameEl = cells.eq(0).find('input')
-    nameEl.val name
-    formulaEl = cells.eq(1).find('input')
-    formulaEl.val formula
+    nameEl = cells.eq(0)
+    nameEl.text name
+    formulaEl = cells.eq(1)
+    formulaEl.text formula
 
   _loadTable: (defs) -> @loadRow(i, def.name, def.expr.text) for def, i in defs
 
   _parseTable:  ->
-    loader = @loader
-    updateFormula = (name, formula) -> if name and formula then loader.setFunctionAsText name, formula
-
     sheetRows = @el.find('tr')
+    self = this
     sheetRows.each ->
       rowEl = $(this)
       cells = rowEl.find('td')
-      nameEl = cells.eq(0).find('input')
-      name  = nameEl.val().trim()
-      formulaEl = cells.eq(1).find('input')
-      formula  = formulaEl.val().trim()
-      updateFormula name, formula
-
-      rowEl.on 'change', -> updateFormula nameEl.val().trim(), formulaEl.val().trim()
+      nameEl = cells.eq(0)
+      name  = nameEl.text().trim()
+      formulaEl = cells.eq(1)
+      formula  = formulaEl.text().trim()
+      self.updateFormula name, formula
 
   _updateTable: (name, value) ->
-    valueCellForName = @el.find('td:first-child input').filter( -> $(this).val() == name).closest('tr').find('td:nth-child(3)')
+    valueCellForName = @el.find('td:first-child').filter( -> $(this).text() == name).closest('tr').find('td:nth-child(3)')
     valueCellForName.text(value)
 
 #module.exports = TableWorksheet

@@ -1,5 +1,7 @@
 $ ->
-  worksheet = window.worksheet = new TableWorksheet($('#sheet'), (name, value) -> console.log("Change: " + name + " = " + value))
+  table = $('#sheet')
+  table.editableTableWidget();
+  worksheet = window.worksheet = new TableWorksheet(table, (name, value) -> console.log("Change: " + name + " = " + value))
   fileUtils = window.fileUtils = new FileUtils();
 
   $('#save').on 'click', -> fileUtils.save worksheet.asText(), $('#name').val()

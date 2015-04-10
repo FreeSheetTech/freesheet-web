@@ -2,3 +2,4 @@
 *.iml
 *.map
 src/main/js/worksheet/*.js
+scratch/*

@@ -9,6 +9,10 @@ table.worksheet {
     font-size: 0.8em;
 }
 
+table.worksheet tr {
+    height: 1.5em;
+}
+
 table.worksheet td {
     border: 1px solid gray;
     min-width: 10em;
