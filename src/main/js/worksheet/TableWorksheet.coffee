@@ -44,7 +44,7 @@ class TableWorksheet
 
   loadRow: (rowIndex, name, formula) ->
     rowEl = @el.find("tbody tr").eq(rowIndex)
-    cells = rowEl.find('td')
+    cells = rowEl.find('td, th')
     nameEl = cells.eq(0)
     nameEl.text name
     formulaEl = cells.eq(1)
@@ -57,7 +57,7 @@ class TableWorksheet
     self = this
     sheetRows.each ->
       rowEl = $(this)
-      cells = rowEl.find('td')
+      cells = rowEl.find('td, th')
       nameEl = cells.eq(0)
       name  = nameEl.text().trim()
       formulaEl = cells.eq(1)
@@ -65,7 +65,7 @@ class TableWorksheet
       self.updateFormula name, formula
 
   _updateTable: (name, value) ->
-    valueCellForName = @el.find('td:first-child').filter( -> $(this).text() == name).closest('tr').find('td:nth-child(3)')
+    valueCellForName = @el.find('td:first-child').filter( -> $(this).text() == name).closest('tr').find('th:nth-child(3)')
     valueCellForName.text(value)
 
 #module.exports = TableWorksheet

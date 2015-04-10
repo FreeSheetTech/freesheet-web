@@ -4,7 +4,12 @@ To Do
     - Move text to TextLoader
     - ReactiveRunner to destroy functions when unloaded
     - Remove semicolons when text loaded into table
-- Table widget
+    - Table widget
+- Replace formula when change name
+- Delete formula if clear name
+- Use null if formula empty?
+- Keep formulas in correct order in text loader
+
 - Expand table
 - Show complex types better - table
 - Tidy up load/save
