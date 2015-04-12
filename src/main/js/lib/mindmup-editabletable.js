@@ -36,6 +36,7 @@ $.fn.editableTableWidget = function (options) {
 					return true;
 				}
 				originalContent = active.html();
+				evt.originalContent = originalContent;
 				active.text(text).trigger(evt, text);
 				if (evt.result === false) {
 					active.html(originalContent);

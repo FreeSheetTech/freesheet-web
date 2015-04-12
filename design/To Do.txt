@@ -5,12 +5,14 @@ To Do
     - ReactiveRunner to destroy functions when unloaded
     - Remove semicolons when text loaded into table
     - Table widget
-- Replace formula when change name
-- Delete formula if clear name
-- Use null if formula empty?
+    - Replace formula when change name
+    - Delete formula if clear name or formula
+    - Use null if formula empty?
 - Keep formulas in correct order in text loader
+- Anonymous formulas - or auto name?
 
 - Expand table
 - Show complex types better - table
 - Tidy up load/save
 - Test in other browsers
+- Duplicate formula names

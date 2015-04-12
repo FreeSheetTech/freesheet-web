@@ -20,9 +20,14 @@ class TableWorksheet
     @el.on 'change', 'td', (evt, newValue) ->
       cell = $(this)
       row = new Row(cell.parent())
-      self.updateFormula row.name(), row.formula()
+      oldName = if cell.is(row.nameCell()) then evt.originalContent else null
+      self.updateFormula row.name(), row.formula(), oldName
 
-  updateFormula: (name, formula, oldName) -> if name and formula then @loader.setFunctionAsText name, formula, oldName
+  updateFormula: (name, formula, oldName) ->
+    console.log 'updateFormula', name, formula, oldName
+    if name and formula then @loader.setFunctionAsText name, formula, oldName
+    if name and not formula then @loader.removeFunction name
+    if not name and oldName then @loader.removeFunction oldName
 
 
   asText: -> @loader.asText()
@@ -58,14 +63,14 @@ class TableWorksheet
 class Row
   constructor: (@rowEl) ->
 
-  _nameCell: -> @rowEl.find('td').eq(0)
-  _formulaCell: -> @rowEl.find('td').eq(1)
-  _valueCell: -> @rowEl.find('th')
-  name: -> @_nameCell().text().trim()
-  formula: -> @_formulaCell().text().trim()
-  setName: (name) -> @_nameCell().text(name)
-  setFormula: (name) -> @_formulaCell().text(name)
-  setValue: (value) -> @_valueCell().text(value)
+  nameCell: -> @rowEl.find('td').eq(0)
+  formulaCell: -> @rowEl.find('td').eq(1)
+  valueCell: -> @rowEl.find('th')
+  name: -> @nameCell().text().trim()
+  formula: -> @formulaCell().text().trim()
+  setName: (name) -> @nameCell().text(name)
+  setFormula: (name) -> @formulaCell().text(name)
+  setValue: (value) -> @valueCell().text(value)
 
 #module.exports = TableWorksheet
 window.TableWorksheet = TableWorksheet
