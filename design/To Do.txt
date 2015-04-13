@@ -8,10 +8,14 @@ To Do
     - Replace formula when change name
     - Delete formula if clear name or formula
     - Use null if formula empty?
-- Keep formulas in correct order in text loader
+    - Keep formulas in correct order in text loader
 - Anonymous formulas - or auto name?
 
 - Expand table
+- Clear table
+- Insert row
+- Delete row
+- Clear row
 - Show complex types better - table
 - Tidy up load/save
 - Test in other browsers

@@ -21,11 +21,11 @@ class TableWorksheet
       cell = $(this)
       row = new Row(cell.parent())
       oldName = if cell.is(row.nameCell()) then evt.originalContent else null
-      self.updateFormula row.name(), row.formula(), oldName
+      self.updateFormula row.name(), row.formula(), oldName, row.nextName()
 
-  updateFormula: (name, formula, oldName) ->
-    console.log 'updateFormula', name, formula, oldName
-    if name and formula then @loader.setFunctionAsText name, formula, oldName
+  updateFormula: (name, formula, oldName, nextName) ->
+    console.log 'updateFormula', name, formula, oldName, nextName
+    if name and formula then @loader.setFunctionAsText name, formula, oldName, nextName
     if name and not formula then @loader.removeFunction name
     if not name and oldName then @loader.removeFunction oldName
 
@@ -71,6 +71,10 @@ class Row
   setName: (name) -> @nameCell().text(name)
   setFormula: (name) -> @formulaCell().text(name)
   setValue: (value) -> @valueCell().text(value)
+
+  nextName: ->
+    followingRowNames = @rowEl.nextAll().map((i, el) -> new Row($(el)).name()).get()
+    (n for n in followingRowNames when n != '')[0]
 
 #module.exports = TableWorksheet
 window.TableWorksheet = TableWorksheet

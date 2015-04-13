@@ -2,4 +2,5 @@
 *.iml
 *.map
 src/main/js/worksheet/*.js
-scratch/*
+scratch/
+node_modules/
