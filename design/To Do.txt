@@ -11,7 +11,7 @@ To Do
     - Keep formulas in correct order in text loader
 - Anonymous formulas - or auto name?
 
-- Expand table
+    - Expand table
 - Clear table
 - Insert row
 - Delete row
