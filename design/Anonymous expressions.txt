@@ -1,0 +1,25 @@
+Anonymous expressions
+=====================
+
+Aim
+---
+- Allow expressions to be entered into the worksheet and evaluated without naming them
+
+Functionality
+-------------
+- If a formula is entered in a row but not the name, the value is shown
+- The formula cannot be referenced in others
+- When saved as text, the formula is retained
+- When loaded back from text, the formula appears again
+
+
+Implementation
+--------------
+- Give anonymous formulas special names in runner, but don't show on sheet
+- Special names are __unnamed_nnn
+- When a row is changed, if no text in name cell, get or assign special name, use that to set in runner
+- If clear name cell, delete function with old name and set it with special name
+- If enter name cell in anonymous row, delete function with special name and set it with entered name
+- When a row is parsed on initial load, if no text in name cell, assign special name, use that to set in runner
+- Store special names in data-attribute
+- Remove special name when name entered

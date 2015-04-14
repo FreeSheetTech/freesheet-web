@@ -34,8 +34,7 @@ class TableWorksheet
 
   clear: ->
     @loader.clear()
-    @el.find('input').val ''
-    @el.find('td:nth-child(3)').text ''
+    @el.find('tbody td, tbody th').text ''
 
   loadText: (text) ->
     @clear()

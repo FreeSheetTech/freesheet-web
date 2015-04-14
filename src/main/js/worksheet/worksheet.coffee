@@ -14,3 +14,4 @@ $ ->
   loadFile.on 'change', -> fileUtils.load loadFile.get(0).files[0], fileLoaded
 
   $('#addRows').on 'click', -> table.addRows(5)
+  $('#clear').on 'click', -> worksheet.clear()

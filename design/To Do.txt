@@ -12,7 +12,7 @@ To Do
 - Anonymous formulas - or auto name?
 
     - Expand table
-- Clear table
+    - Clear table
 - Insert row
 - Delete row
 - Clear row
