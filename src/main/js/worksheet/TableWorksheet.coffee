@@ -6,6 +6,22 @@ PageFunctions = require('page-functions')
 
 class TableWorksheet
 
+  htmlFor = (value) ->
+    switch
+      when value == null or value == undefined then ''
+      when $.isArray value then htmlForArray value
+      when $.isPlainObject value then htmlForObject value
+      else value.toString()
+
+  htmlForArray = (value) ->
+    rowHtml = (x) -> "<tr><td>#{htmlFor x}</td></tr>"
+    "<table class='value'> #{(rowHtml x for x in value).join('')} </table>"
+
+  htmlForObject = (value) ->
+    rowHtml = (name, x) -> "<tr><td>#{name}</td><td>#{htmlFor x}</td></tr>"
+    "<table class='value'> #{(rowHtml(name, x) for name, x of value).join('')} </table>"
+
+
   constructor: (@el, @changeCallback) ->
     @runner = new ReactiveRunner()
     @runner.onChange @changeCallback
@@ -59,9 +75,11 @@ class TableWorksheet
       row = new Row($(this))
       self.updateFormula row.name(), row.formula()
 
-  _updateTable: (name, value) ->
-    valueCellForName = @el.find('td:first-child').filter( -> $(this).text() == name).closest('tr').find('th:nth-child(3)')
-    valueCellForName.text(value)
+  _updateTable: (name, value) -> @_rowForName(name).setValue htmlFor(value)
+
+  _rowForName: (name) ->
+    new Row @el.find('td:first-child').filter(-> $(this).text() == name).closest('tr')
+
 
 class Row
   constructor: (@rowEl) ->
@@ -73,7 +91,7 @@ class Row
   formula: -> @formulaCell().text().trim()
   setName: (name) -> @nameCell().text(name)
   setFormula: (name) -> @formulaCell().text(name)
-  setValue: (value) -> @valueCell().text(value)
+  setValue: (value) -> @valueCell().html(value)
 
   nextName: ->
     followingRowNames = @rowEl.nextAll().map((i, el) -> new Row($(el)).name()).get()

@@ -17,6 +17,12 @@ table.worksheet td, table.worksheet th {
     border: 1px solid gray;
     min-width: 10em;
 }
+table.worksheet tbody td, table.worksheet tbody th {
+    padding: 2px 4px;
+    text-align: left;
+    vertical-align: top;
+    font-weight: normal;
+}
 
 table.worksheet input {
     border: none;
@@ -29,7 +35,7 @@ table.worksheet .actions span {
     background-color: #bfeaf4;
     font-weight: normal;
     font-size: 0.8em;
-    padding: 2px;
+    padding: 1px 2px;
     border: 1px solid gray;
     border-radius: 4px;
 }
@@ -40,4 +46,12 @@ table.worksheet .actions span.insert:before {
 
 table.worksheet .actions span.delete:before {
     content: "Delete";
+}
+
+table.value {
+    border-collapse: collapse;
+}
+
+table.value td {
+    min-width: 3em;
 }
