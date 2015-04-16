@@ -22,3 +22,22 @@ table.worksheet input {
     border: none;
     font-size:  inherit;
 }
+
+table.worksheet .actions span {
+    min-width: 5em;
+    margin-left: 1em;
+    background-color: #bfeaf4;
+    font-weight: normal;
+    font-size: 0.8em;
+    padding: 2px;
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+
+table.worksheet .actions span.insert:before {
+    content: "Insert";
+}
+
+table.worksheet .actions span.delete:before {
+    content: "Delete";
+}

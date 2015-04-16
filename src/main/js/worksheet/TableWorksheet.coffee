@@ -23,6 +23,10 @@ class TableWorksheet
       oldName = if cell.is(row.nameCell()) then evt.originalContent else null
       self.updateFormula row.name(), row.formula(), oldName, row.nextName()
 
+    @el.on 'rowDeleted', (e, removedRow) ->
+      row = new Row(removedRow)
+      self.loader.removeFunction row.name()
+
   updateFormula: (name, formula, oldName, nextName) ->
     console.log 'updateFormula', name, formula, oldName, nextName
     if name and formula then @loader.setFunctionAsText name, formula, oldName, nextName
@@ -34,7 +38,7 @@ class TableWorksheet
 
   clear: ->
     @loader.clear()
-    @el.find('tbody td, tbody th').text ''
+    @el.find('tbody td, tbody th.value').empty()
 
   loadText: (text) ->
     @clear()
@@ -62,9 +66,9 @@ class TableWorksheet
 class Row
   constructor: (@rowEl) ->
 
-  nameCell: -> @rowEl.find('td').eq(0)
-  formulaCell: -> @rowEl.find('td').eq(1)
-  valueCell: -> @rowEl.find('th')
+  nameCell: -> @rowEl.find('td.name')
+  formulaCell: -> @rowEl.find('td.formula')
+  valueCell: -> @rowEl.find('th.value')
   name: -> @nameCell().text().trim()
   formula: -> @formulaCell().text().trim()
   setName: (name) -> @nameCell().text(name)

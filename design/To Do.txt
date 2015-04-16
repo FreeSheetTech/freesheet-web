@@ -13,10 +13,11 @@ To Do
 
     - Expand table
     - Clear table
-- Insert row
-- Delete row
+    - Insert row above
+    - Delete row
 - Clear row
 - Show complex types better - table
+- Enter complex types better - lists, aggregations
 - Tidy up load/save
 - Test in other browsers
 - Duplicate formula names
