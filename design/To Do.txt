@@ -14,7 +14,6 @@ To Do
     - Clear table
     - Insert row above
     - Delete row
-- Clear row
     - Show complex types better - table
 - Enter complex types better - lists, aggregations
 - Tidy up load/save
@@ -22,3 +21,4 @@ To Do
 - Duplicate formula names
 - Anonymous formulas - or auto name?
 - Handle evaluation errors eg property of null
+- Clear row

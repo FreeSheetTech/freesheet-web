@@ -1,7 +1,9 @@
 ReactiveRunner = require('reactive-runner')
 TextLoader = require('text-loader')
 TextParser = require('text-parser')
+CoreFunctions = require('core-functions')
 PageFunctions = require('page-functions')
+TimeFunctions = require('time-functions')
 
 
 class TableWorksheet
@@ -25,7 +27,9 @@ class TableWorksheet
   constructor: (@el, @changeCallback) ->
     @runner = new ReactiveRunner()
     @runner.onChange @changeCallback
-    @runner.addProvidedStreams PageFunctions
+    @runner.addProvidedStreams CoreFunctions
+    @runner.addProvidedStreams TimeFunctions
+    @runner.addProvidedStreams TimeFunctions
     @runner.onChange (name, value) => @_updateTable name, value
     @loader = new TextLoader(@runner)
     @_parseTable()
