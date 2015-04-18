@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/freesheet-web.css"/>
+    <link rel="stylesheet" href="css/handsontable.full.css"/>
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/handsontable.full.js"></script>
+    <script src="js/lib/freesheet.js"></script>
+    <script src="js/worksheet/TableWorksheet.js"></script>
+    <script src="js/worksheet/FileUtils.js"></script>
+    <script src="js/lib/FileSaver.js"></script>
+    <title>Freesheet</title>
+</head>
+<body>
+    <h1>Freesheet</h1>
+    <p>
+        Load file <input id="load" type="file"/>
+    </p>
+    <p>
+        Save file <input id="name" type="text"/> <button id="save">Save</button>
+    </p>
+
+    <div id="sheet" class="worksheet"></div>
+
+    <script src="js/worksheet/worksheet2.js"></script>
+</body>
+</html>

@@ -24,16 +24,29 @@ class TableWorksheet
     "<table class='value'> #{(rowHtml(name, x) for name, x of value).join('')} </table>"
 
 
-  constructor: (@el, @changeCallback) ->
+  constructor: (el, @changeCallback) ->
     @runner = new ReactiveRunner()
     @runner.onChange @changeCallback
     @runner.addProvidedStreams CoreFunctions
     @runner.addProvidedStreams TimeFunctions
-    @runner.addProvidedStreams TimeFunctions
+    @runner.addProvidedStreams PageFunctions
     @runner.onChange (name, value) => @_updateTable name, value
     @loader = new TextLoader(@runner)
-    @_parseTable()
-    @_handleEvents()
+    @data = [
+      {name: 'aa', formula: '10', value: 10}
+    ]
+    @table = new Handsontable el.get(0), {
+      data: @data
+      contextMenu: true
+      startRows: 5
+      minSpareRows: 1
+      startCols: 3
+      dataSchema: {name: null, formula: null, value: null}
+      colHeaders: ['Name', 'Formula', 'Value']
+      columns: [{data: 'name'}, {data: 'formula'}, {data: 'value'}]
+    }
+#    @_parseTable()
+#    @_handleEvents()
 
   _handleEvents: ->
     self = this
