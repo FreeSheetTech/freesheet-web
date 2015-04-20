@@ -33,7 +33,7 @@ class TableWorksheet
     @runner.onChange (name, value) => @_updateTable name, value
     @loader = new TextLoader(@runner)
     @data = [
-      {name: 'aa', formula: '10', value: 10}
+      {name: null, formula: null, value: null}
     ]
     @table = new Handsontable el.get(0), {
       data: @data
@@ -44,21 +44,25 @@ class TableWorksheet
       dataSchema: {name: null, formula: null, value: null}
       colHeaders: ['Name', 'Formula', 'Value']
       columns: [{data: 'name'}, {data: 'formula'}, {data: 'value'}]
+      autoWrapRow: true
     }
 #    @_parseTable()
-#    @_handleEvents()
+    @_handleEvents()
 
   _handleEvents: ->
     self = this
-    @el.on 'change', 'td', (evt, newValue) ->
-      cell = $(this)
-      row = new Row(cell.parent())
-      oldName = if cell.is(row.nameCell()) then evt.originalContent else null
-      self.updateFormula row.name(), row.formula(), oldName, row.nextName()
+    @table.addHook 'afterChange', (changes, source) ->
+      console.log 'afterChange', changes
+      firstChange = changes[0]
+      [rowIndex, propertyName, oldValue, newValue] = firstChange
+      row = self.data[rowIndex]
+      oldName = if propertyName == 'name' then oldValue else null
+      nextRowName = self.data[rowIndex + 1..].filter( (x) -> x.name)[0]?.name
+      self.updateFormula row.name, row.formula, oldName, nextRowName
 
-    @el.on 'rowDeleted', (e, removedRow) ->
-      row = new Row(removedRow)
-      self.loader.removeFunction row.name()
+#    @el.on 'rowDeleted', (e, removedRow) ->
+#      row = new Row(removedRow)
+#      self.loader.removeFunction row.name()
 
   updateFormula: (name, formula, oldName, nextName) ->
     console.log 'updateFormula', name, formula, oldName, nextName
@@ -92,10 +96,12 @@ class TableWorksheet
       row = new Row($(this))
       self.updateFormula row.name(), row.formula()
 
-  _updateTable: (name, value) -> @_rowForName(name).setValue htmlFor(value)
+  _updateTable: (name, value) ->
+    @_rowForName(name).value = htmlFor(value)
+    @table.render()
 
   _rowForName: (name) ->
-    new Row @el.find('td:first-child').filter(-> $(this).text() == name).closest('tr')
+    @data.filter( (x) -> x.name == name)[0]
 
 
 class Row
