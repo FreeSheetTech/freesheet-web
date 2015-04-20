@@ -21,4 +21,3 @@ To Do
 - Duplicate formula names
 - Anonymous formulas - or auto name?
 - Handle evaluation errors eg property of null
-- Clear row

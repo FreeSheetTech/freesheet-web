@@ -46,7 +46,6 @@ class TableWorksheet
       columns: [{data: 'name'}, {data: 'formula'}, {data: 'value'}]
       autoWrapRow: true
     }
-#    @_parseTable()
     @_handleEvents()
 
   _handleEvents: ->
@@ -74,10 +73,6 @@ class TableWorksheet
 
   asText: -> @loader.asText()
 
-  clear: ->
-    @loader.clear()
-    @el.find('tbody td, tbody th.value').empty()
-
   loadText: (text) ->
     defs = @loader.parseDefinitions(text)
     @data = @_dataFromDefs defs
@@ -87,28 +82,13 @@ class TableWorksheet
   _dataFromDefs: (defs) -> defs.map (d) -> {name: d.name, formula: d.expr.text, value: null}
 
   _updateTable: (name, value) ->
-    @_rowForName(name).value = htmlFor(value)
+    @_rowForName(name)?.value = htmlFor(value)
+    r.value = null for r in @data when !r.name or !r.value
     @table.render()
 
   _rowForName: (name) ->
-    @data.filter( (x) -> x.name == name)[0]
+    (r for r in @data when r.name == name)[0]
 
-
-class Row
-  constructor: (@rowEl) ->
-
-  nameCell: -> @rowEl.find('td.name')
-  formulaCell: -> @rowEl.find('td.formula')
-  valueCell: -> @rowEl.find('th.value')
-  name: -> @nameCell().text().trim()
-  formula: -> @formulaCell().text().trim()
-  setName: (name) -> @nameCell().text(name)
-  setFormula: (name) -> @formulaCell().text(name)
-  setValue: (value) -> @valueCell().html(value)
-
-  nextName: ->
-    followingRowNames = @rowEl.nextAll().map((i, el) -> new Row($(el)).name()).get()
-    (n for n in followingRowNames when n != '')[0]
 
 #module.exports = TableWorksheet
 window.TableWorksheet = TableWorksheet
