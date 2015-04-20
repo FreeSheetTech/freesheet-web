@@ -53,6 +53,7 @@ class TableWorksheet
     self = this
     @table.addHook 'afterChange', (changes, source) ->
       console.log 'afterChange', changes
+      if !changes or changes.length == 0 then return
       firstChange = changes[0]
       [rowIndex, propertyName, oldValue, newValue] = firstChange
       row = self.data[rowIndex]
@@ -78,23 +79,12 @@ class TableWorksheet
     @el.find('tbody td, tbody th.value').empty()
 
   loadText: (text) ->
-    @clear()
-    @_loadTable @loader.parseDefinitions(text)
+    defs = @loader.parseDefinitions(text)
+    @data = @_dataFromDefs defs
+    @table.loadData @data
     @loader.loadDefinitions text
 
-  loadRow: (rowIndex, name, formula) ->
-    row = new Row(@el.find("tbody tr").eq(rowIndex))
-    row.setName name
-    row.setFormula formula
-
-  _loadTable: (defs) -> @loadRow(i, def.name, def.expr.text) for def, i in defs
-
-  _parseTable:  ->
-    sheetRows = @el.find('tr')
-    self = this
-    sheetRows.each ->
-      row = new Row($(this))
-      self.updateFormula row.name(), row.formula()
+  _dataFromDefs: (defs) -> defs.map (d) -> {name: d.name, formula: d.expr.text, value: null}
 
   _updateTable: (name, value) ->
     @_rowForName(name).value = htmlFor(value)
