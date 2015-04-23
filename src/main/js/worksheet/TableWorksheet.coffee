@@ -37,10 +37,8 @@ class TableWorksheet
     ]
     @table = new Handsontable el.get(0), {
       data: @data
-      contextMenu: true
-      startRows: 5
+      contextMenu: ["row_above", "row_below", "remove_row", "undo", "redo"]
       minSpareRows: 1
-      startCols: 3
       dataSchema: {name: null, formula: null, value: null}
       colHeaders: ['Name', 'Formula', 'Value']
       columns: [
@@ -56,13 +54,12 @@ class TableWorksheet
     self = this
     @table.addHook 'afterChange', (changes, source) ->
       console.log 'afterChange', changes
-      if !changes or changes.length == 0 then return
-      firstChange = changes[0]
-      [rowIndex, propertyName, oldValue, newValue] = firstChange
-      row = self.data[rowIndex]
-      oldName = if propertyName == 'name' then oldValue else null
-      nextRowName = self.data[rowIndex + 1..].filter( (x) -> x.name)[0]?.name
-      self.updateFormula row.name, row.formula, oldName, nextRowName
+      for change in (changes or [])
+        [rowIndex, propertyName, oldValue, newValue] = change
+        row = self.data[rowIndex]
+        oldName = if propertyName == 'name' then oldValue else null
+        nextRowName = self.data[rowIndex + 1..].filter( (x) -> x.name)[0]?.name
+        self.updateFormula row.name, row.formula, oldName, nextRowName
 
 #    @el.on 'rowDeleted', (e, removedRow) ->
 #      row = new Row(removedRow)

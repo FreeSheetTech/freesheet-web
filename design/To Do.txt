@@ -12,8 +12,8 @@ To Do
 
     - Expand table
     - Values read-only but copiable
-- Clear multiple rows
-- Insert row above
+    - Clear multiple rows
+    - Insert row above
 - Delete row
 - Show complex types better - table
 - Enter complex types better - lists, aggregations
