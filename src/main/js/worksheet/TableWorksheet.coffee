@@ -43,7 +43,11 @@ class TableWorksheet
       startCols: 3
       dataSchema: {name: null, formula: null, value: null}
       colHeaders: ['Name', 'Formula', 'Value']
-      columns: [{data: 'name'}, {data: 'formula'}, {data: 'value'}]
+      columns: [
+        {data: 'name'}
+        {data: 'formula'}
+        {data: 'value', readOnly: true}
+      ]
       autoWrapRow: true
     }
     @_handleEvents()
