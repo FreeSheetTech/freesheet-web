@@ -23,6 +23,9 @@ class TableWorksheet
     rowHtml = (name, x) -> "<tr><td>#{name}</td><td>#{htmlFor x}</td></tr>"
     "<table class='value'> #{(rowHtml(name, x) for name, x of value).join('')} </table>"
 
+  renderValue = (instance, td, row, col, prop, value, cellProperties) ->
+    $(td).html(htmlFor(value)).addClass('value-cell')
+
 
   constructor: (el, @changeCallback) ->
     @runner = new ReactiveRunner()
@@ -44,7 +47,7 @@ class TableWorksheet
       columns: [
         {data: 'name'}
         {data: 'formula'}
-        {data: 'value', readOnly: true}
+        {data: 'value', readOnly: true, renderer: renderValue}
       ]
       autoWrapRow: true
     }
@@ -90,7 +93,7 @@ class TableWorksheet
   _dataFromDefs: (defs) -> defs.map (d) -> {name: d.name, formula: d.expr.text, value: null}
 
   _updateTable: (name, value) ->
-    @_rowForName(name)?.value = htmlFor(value)
+    @_rowForName(name)?.value = value
     r.value = null for r in @data when !r.name or !r.value
     @table.render()
 

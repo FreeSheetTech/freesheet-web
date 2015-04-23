@@ -2,3 +2,14 @@ body {
     font-family: Helvetica, Arial, Verdana, sans-serif;
 }
 
+.handsontable td.value-cell {
+    padding: 0;
+}
+
+table.value {
+    border-collapse: collapse;
+}
+
+table.value td {
+    padding: 0;
+}
