@@ -35,9 +35,8 @@ class TableWorksheet
     @runner.addProvidedStreams PageFunctions
     @runner.onChange (name, value) => @_updateTable name, value
     @loader = new TextLoader(@runner)
-    @data = [
-      {name: null, formula: null, value: null}
-    ]
+    @data = ({name: null, formula: null, value: null} for i in [1..5] )
+
     @table = new Handsontable el.get(0), {
       data: @data
       contextMenu: ["row_above", "row_below", "remove_row", "undo", "redo"]
@@ -45,7 +44,7 @@ class TableWorksheet
       dataSchema: {name: null, formula: null, value: null}
       colHeaders: ['Name', 'Formula', 'Value']
       columns: [
-        {data: 'name'}
+        {data: 'name', validator: new RegExp('[A-Za-z]\w*')}
         {data: 'formula'}
         {data: 'value', readOnly: true, renderer: renderValue}
       ]

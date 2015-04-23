@@ -17,8 +17,9 @@ To Do
     - Delete row
     - Delete multiple rows
     - Show complex types better - table
-- Enter complex types better - lists, aggregations
+- Date/time formatting
 - Tidy up load/save
+- Enter complex types better - lists, aggregations
 - Test in other browsers
 - Duplicate formula names
 - Anonymous formulas - or auto name?
