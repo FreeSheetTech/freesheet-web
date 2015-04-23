@@ -61,6 +61,13 @@ class TableWorksheet
         nextRowName = self.data[rowIndex + 1..].filter( (x) -> x.name)[0]?.name
         self.updateFormula row.name, row.formula, oldName, nextRowName
 
+    @table.addHook 'beforeRemoveRow', (index, numberOfRows) ->
+      console.log 'beforeRemoveRow', index, numberOfRows, self.data
+      for row in self.data[index...index + numberOfRows]
+        console.log 'Removing row', row
+        self.loader.removeFunction row.name
+
+
 #    @el.on 'rowDeleted', (e, removedRow) ->
 #      row = new Row(removedRow)
 #      self.loader.removeFunction row.name()
