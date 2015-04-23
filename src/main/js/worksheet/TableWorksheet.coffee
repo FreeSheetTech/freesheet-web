@@ -50,6 +50,7 @@ class TableWorksheet
         {data: 'value', readOnly: true, renderer: renderValue}
       ]
       autoWrapRow: true
+      rowHeaders: true
     }
     @_handleEvents()
 

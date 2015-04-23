@@ -15,7 +15,7 @@ To Do
     - Clear multiple rows
     - Insert row above
     - Delete row
-- Delete multiple rows
+    - Delete multiple rows
     - Show complex types better - table
 - Enter complex types better - lists, aggregations
 - Tidy up load/save
