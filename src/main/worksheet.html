@@ -3,12 +3,12 @@
 <head lang="en">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/freesheet-web.css"/>
+    <link rel="stylesheet" href="css/handsontable.full.css"/>
     <script src="js/lib/jquery.js"></script>
-    <script src="js/lib/mindmup-editabletable.js"></script>
+    <script src="js/lib/handsontable.full.js"></script>
     <script src="js/lib/freesheet.js"></script>
     <script src="js/worksheet/TableWorksheet.js"></script>
     <script src="js/worksheet/FileUtils.js"></script>
-    <script src="js/worksheet/TableHandler.js"></script>
     <script src="js/lib/FileSaver.js"></script>
     <title>Freesheet</title>
 </head>
@@ -21,68 +21,8 @@
         Save file <input id="name" type="text"/> <button id="save">Save</button>
     </p>
 
-    <table id="sheet" class="worksheet">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Formula</th>
-            <th>Value</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="name"></td>
-                <td class="formula"></td>
-                <th class="value"></th>
-                <th class="actions">
-                    <span class="insert"></span>
-                    <span class="delete"></span>
-                </th>
-            </tr>
-            <tr>
-                <td class="name"></td>
-                <td class="formula"></td>
-                <th class="value"></th>
-                <th class="actions">
-                    <span class="insert"></span>
-                    <span class="delete"></span>
-                </th>
-            </tr>
-            <tr>
-                <td class="name"></td>
-                <td class="formula"></td>
-                <th class="value"></th>
-                <th class="actions">
-                    <span class="insert"></span>
-                    <span class="delete"></span>
-                </th>
-            </tr>
-            <tr>
-                <td class="name"></td>
-                <td class="formula"></td>
-                <th class="value"></th>
-                <th class="actions">
-                    <span class="insert"></span>
-                    <span class="delete"></span>
-                </th>
-            </tr>
-            <tr>
-                <td class="name"></td>
-                <td class="formula"></td>
-                <th class="value"></th>
-                <th class="actions">
-                    <span class="insert"></span>
-                    <span class="delete"></span>
-                </th>
-            </tr>
-        </tbody>
-    </table>
+    <div id="sheet" class="worksheet"></div>
 
-    <p>
-        <button id="addRows">Add rows</button>
-        <button id="clear">Clear worksheet</button>
-    </p>
-
-    <script src="js/worksheet/worksheet.js"></script>
+    <script src="js/worksheet/worksheet2.js"></script>
 </body>
 </html>
