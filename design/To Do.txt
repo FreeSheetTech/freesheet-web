@@ -22,5 +22,6 @@ To Do
 - Enter complex types better - lists, aggregations
 - Test in other browsers
 - Duplicate formula names
-- Anonymous formulas - or auto name?
+- Anonymous formulas - or auto name? Do in worksheet as auto-name, runner doesn't know
 - Handle evaluation errors eg property of null
+- Put row back after undo doesn't update formulas

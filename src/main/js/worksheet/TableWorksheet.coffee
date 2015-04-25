@@ -70,11 +70,6 @@ class TableWorksheet
         console.log 'Removing row', row
         self.loader.removeFunction row.name
 
-
-#    @el.on 'rowDeleted', (e, removedRow) ->
-#      row = new Row(removedRow)
-#      self.loader.removeFunction row.name()
-
   updateFormula: (name, formula, oldName, nextName) ->
     console.log 'updateFormula', name, formula, oldName, nextName
     if name and formula then @loader.setFunctionAsText name, formula, oldName, nextName
@@ -85,10 +80,12 @@ class TableWorksheet
   asText: -> @loader.asText()
 
   loadText: (text) ->
-    defs = @loader.parseDefinitions(text)
-    @data = @_dataFromDefs defs
-    @table.loadData @data
+    @loading = true
+    @loader.clear()
+    @data.length = 0
     @loader.loadDefinitions text
+    @_newRow null
+    @loading = false
 
   _dataFromDefs: (defs) -> defs.map (d) -> {name: d.name, formula: d.expr.text, value: null}
 
@@ -98,7 +95,14 @@ class TableWorksheet
     @table.render()
 
   _rowForName: (name) ->
-    (r for r in @data when r.name == name)[0]
+    existingRow = (r for r in @data when r.name == name)[0]
+    if @loading then existingRow or @_newRow(name) else existingRow
+
+  _newRow: (name) ->
+    def = (d for d in @loader.functionDefinitions() when d.name == name)[0]
+    row = {name: def?.name, formula: def?.expr.text, value: null}
+    @data.push row
+    row
 
 
 #module.exports = TableWorksheet

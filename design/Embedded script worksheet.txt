@@ -1,0 +1,22 @@
+Embedded script worksheet
+=========================
+
+- HTML page can contain a script tag with type application/x-freesheet and an id
+- Page can include a JS script for worksheets - may just be the main one
+- Freesheet object on window to control all scripts
+- TextLoader and ReactiveRunner created for each script in page created by a single call to Freesheet
+- If page has a div linked to the script by data-freesheet-script-id, creates a worksheet in it
+
+Tests
+-----
+- Given an HTML page with an embedded Freesheet script
+- There is a runner available for that script
+- JS in the page can subscribe to changes and get values
+
+
+- Given an HTML page with an embedded script and a div with a data-freesheet-script-id attribute referring to it
+- A worksheet appears in the div showing the formulas from the script
+
+Technical
+---------
+- Include a freesheet-web.js file created with browserify
