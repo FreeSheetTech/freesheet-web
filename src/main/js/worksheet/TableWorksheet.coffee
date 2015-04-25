@@ -1,6 +1,4 @@
-ReactiveRunner = require('reactive-runner')
-TextLoader = require('text-loader')
-TextParser = require('text-parser')
+Freesheet = require 'freesheet'
 CoreFunctions = require('core-functions')
 PageFunctions = require('page-functions')
 TimeFunctions = require('time-functions')
@@ -28,13 +26,12 @@ class TableWorksheet
 
 
   constructor: (el, @changeCallback) ->
-    @runner = new ReactiveRunner()
-    @runner.onChange @changeCallback
-    @runner.addProvidedStreams CoreFunctions
-    @runner.addProvidedStreams TimeFunctions
-    @runner.addProvidedStreams PageFunctions
-    @runner.onChange (name, value) => @_updateTable name, value
-    @loader = new TextLoader(@runner)
+    @sheet = Freesheet.createSheet(el.attr('id') or 'sheet1')
+    @sheet.onChange @changeCallback
+    @sheet.addFunctions CoreFunctions
+    @sheet.addFunctions TimeFunctions
+    @sheet.addFunctions PageFunctions
+    @sheet.onChange (name, value) => @_updateTable name, value
     @data = ({name: null, formula: null, value: null} for i in [1..5] )
 
     @table = new Handsontable el.get(0), {
@@ -68,22 +65,22 @@ class TableWorksheet
       console.log 'beforeRemoveRow', index, numberOfRows, self.data
       for row in self.data[index...index + numberOfRows]
         console.log 'Removing row', row
-        self.loader.removeFunction row.name
+        self.sheet.remove row.name
 
   updateFormula: (name, formula, oldName, nextName) ->
     console.log 'updateFormula', name, formula, oldName, nextName
-    if name and formula then @loader.setFunctionAsText name, formula, oldName, nextName
-    if name and not formula then @loader.removeFunction name
-    if not name and oldName then @loader.removeFunction oldName
+    if name and formula then @sheet.update name, formula, oldName, nextName
+    if name and not formula then @sheet.remove name
+    if not name and oldName then @sheet.remove oldName
 
 
-  asText: -> @loader.asText()
+  asText: -> @sheet.text()
 
   loadText: (text) ->
     @loading = true
-    @loader.clear()
+    @sheet.clear()
     @data.length = 0
-    @loader.loadDefinitions text
+    @sheet.load text
     @_newRow null
     @loading = false
 
@@ -99,7 +96,7 @@ class TableWorksheet
     if @loading then existingRow or @_newRow(name) else existingRow
 
   _newRow: (name) ->
-    def = (d for d in @loader.functionDefinitions() when d.name == name)[0]
+    def = (d for d in @sheet.formulas() when d.name == name)[0]
     row = {name: def?.name, formula: def?.expr.text, value: null}
     @data.push row
     row
