@@ -1,6 +1,7 @@
 .idea/
 *.iml
 *.map
-src/main/js/worksheet/*.js
+src/main/js/**/*.js
+dist/
 scratch/
 node_modules/

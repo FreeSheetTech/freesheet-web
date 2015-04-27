@@ -6,18 +6,21 @@
     <style>
         h1.page-heading { font: 30px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 1em 2em;}
     </style>
+    <script src="js/lib/should.js"></script>
+    <script src="js/lib/mocha.js"></script>
+    <script src="../main/js/lib/jquery.js"></script>
+    <script src="../main/js/lib/freesheet.js"></script>
+    <script src="../main/js/web/FreesheetWeb.js"></script>
 </head>
+
 <body>
     <h1 class="page-heading">Freesheet Web Tests</h1>
     <div id="mocha"></div>
-    <script src="../main/js/lib/jquery.js"></script>
-    <script src="js/lib/mocha.js"></script>
-    <script src="js/lib/should.js"></script>
     <script>mocha.setup('bdd')</script>
-    <script src="worksheet/embeddedScript.js"></script>
+    <script src="worksheet/embeddedScriptSpec.js"></script>
     <script>
         mocha.checkLeaks();
-        mocha.globals(['jQuery']);
+        mocha.globals(['jQuery', 'InfixExpression', 'AggregationSelector']);
         mocha.run();
     </script>
 </body>

@@ -14,7 +14,8 @@ Tests
 - JS in the page can subscribe to changes and get values
 
 
-- Given an HTML page with an embedded script and a div with a data-freesheet-script-id attribute referring to it
+- Given an HTML page with an embedded script and a div with a class freesheet-worksheet-container
+- When createWorksheets is called
 - A worksheet appears in the div showing the formulas from the script
 
 Technical
