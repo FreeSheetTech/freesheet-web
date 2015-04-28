@@ -1,9 +1,3 @@
-Freesheet = require 'freesheet'
-CoreFunctions = require('core-functions')
-PageFunctions = require('page-functions')
-TimeFunctions = require('time-functions')
-
-
 class TableWorksheet
 
   htmlFor = (value) ->
@@ -25,12 +19,7 @@ class TableWorksheet
     $(td).html(htmlFor(value)).addClass('value-cell')
 
 
-  constructor: (el, @changeCallback) ->
-    @sheet = Freesheet.createSheet(el.attr('id') or 'sheet1')
-    @sheet.onChange @changeCallback
-    @sheet.addFunctions CoreFunctions
-    @sheet.addFunctions TimeFunctions
-    @sheet.addFunctions PageFunctions
+  constructor: (el, @sheet) ->
     @sheet.onChange (name, value) => @_updateTable name, value
     @data = ({name: null, formula: null, value: null} for i in [1..5] )
 

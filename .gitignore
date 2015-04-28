@@ -2,6 +2,7 @@
 *.iml
 *.map
 src/main/js/**/*.js
+src/test/**/*.js
 dist/
 scratch/
 node_modules/

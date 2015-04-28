@@ -1,7 +1,18 @@
+Freesheet = require 'freesheet'
+CoreFunctions = require('core-functions')
+PageFunctions = require('page-functions')
+TimeFunctions = require('time-functions')
+
 $ ->
   tableEl = $('#sheet')
 
-  worksheet = window.worksheet = new TableWorksheet(tableEl, (name, value) -> console.log("Change: " + name + " = " + value))
+  sheet = Freesheet.createSheet(tableEl.attr('id') or 'sheet1')
+  sheet.onChange (name, value) -> console.log("Change: " + name + " = " + value)
+  sheet.addFunctions CoreFunctions
+  sheet.addFunctions TimeFunctions
+  sheet.addFunctions PageFunctions
+
+  worksheet = window.worksheet = new TableWorksheet tableEl, sheet
   fileUtils = window.fileUtils = new FileUtils();
 
   $('#save').on 'click', -> fileUtils.save worksheet.asText(), $('#name').val()

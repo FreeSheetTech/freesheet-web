@@ -25,9 +25,11 @@
       return testElements = [];
     });
     afterEach(function() {
-      return removeTestElements();
+      if (!location.href.indexOf('debug' !== -1)) {
+        return removeTestElements();
+      }
     });
-    return it('are loaded and available when loadScripts called', function() {
+    it('are loaded and available when loadScripts called', function() {
       var changes, s, storeChanges;
       insertScript('scriptOne', 'a = 10; b = 20; c = a + b');
       Freesheet.loadScripts();
@@ -45,6 +47,17 @@
           c: 30
         }
       ]);
+    });
+    return it.skip('can create a worksheet when createWorksheets called', function() {
+      var eValueCell, sheetDiv, sheetTable, worksheetDiv;
+      insertScript('scriptTwo', 'd = 30; e = 20; f = d - e');
+      worksheetDiv = insertElement('<div class="freesheet-worksheets"></div>');
+      Freesheet.loadScripts();
+      Freesheet.createWorksheets();
+      sheetDiv = worksheetDiv.find('div#scriptTwo_worksheet');
+      sheetTable = sheetDiv.find('.htMaster table.htCore');
+      eValueCell = sheetTable.find('tbody tr:nth-child(3) td.value-cell');
+      return eValueCell.text().should.eql('10');
     });
   });
 
