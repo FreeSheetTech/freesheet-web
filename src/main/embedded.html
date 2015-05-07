@@ -7,13 +7,14 @@
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/handsontable.full.js"></script>
     <script src="js/lib/freesheet.js"></script>
+    <script src="js/web/FreesheetWeb.js"></script>
     <script src="js/worksheet/TableWorksheet.js"></script>
     <title>Freesheet</title>
 </head>
 <body>
     <h1>Freesheet with embedded script</h1>
 
-    <div id="sheet1Worksheet" class="worksheet"></div>
+    <div id="sheet1Worksheet" class="freesheet-worksheets"></div>
 
     <script id="sheetOne" type="text/freesheet">
         a = 100;
@@ -23,10 +24,8 @@
 
     <script>
         var Freesheet = require('freesheet');
-        var sheetOne = Freesheet.createSheet('sheetOne');
-        sheetOne.onChange(function(name, value) { console.log(name, '=', value)});
-        var text = $('script#sheetOne').text()
-        sheetOne.load(text);
+        Freesheet.loadScripts();
+        Freesheet.createWorksheets();
     </script>
 </body>
 </html>

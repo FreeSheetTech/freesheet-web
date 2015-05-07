@@ -43,6 +43,7 @@ class TableWorksheet
       rowHeaders: true
     }
     @_handleEvents()
+    @_updateTable()
 
   _handleEvents: ->
     self = this

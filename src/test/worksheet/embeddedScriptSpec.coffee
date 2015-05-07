@@ -36,7 +36,6 @@ describe 'Freesheet scripts embedded in pages', ->
     Freesheet.createWorksheets()
 
     sheetDiv = worksheetDiv.find 'div#scriptTwo_worksheet'
-    sheetTable = sheetDiv.find '.htMaster table.htCore'
+    sheetTable = sheetDiv.find '.ht_master table.htCore'
     eValueCell = sheetTable.find('tbody tr:nth-child(3) td.value-cell')
     eValueCell.text().should.eql '10'
-
