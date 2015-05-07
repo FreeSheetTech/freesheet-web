@@ -18,19 +18,24 @@ class TableWorksheet
   renderValue = (instance, td, row, col, prop, value, cellProperties) ->
     $(td).html(htmlFor(value)).addClass('value-cell')
 
+  dataFromDefAndValues = (defs) ->
+    defs.map (d) ->
+      {name: d.name, formula: d.definition.expr.text, value: d.value}
+
+  emptyRow = () -> {name: null, formula: null, value: null}
 
   constructor: (el, @sheet) ->
     @sheet.onChange (name, value) => @_updateTable name, value
-    @data = ({name: null, formula: null, value: null} for i in [1..5] )
+    @data = (emptyRow() for i in [1..5] )
 
     @table = new Handsontable el.get(0), {
       data: @data
       contextMenu: ["row_above", "row_below", "remove_row", "undo", "redo"]
       minSpareRows: 1
-      dataSchema: {name: null, formula: null, value: null}
+      dataSchema: emptyRow()
       colHeaders: ['Name', 'Formula', 'Value']
       columns: [
-        {data: 'name', validator: new RegExp('[A-Za-z]\w*')}
+        {data: 'name', validator: new RegExp('[A-Za-z]\w*|')}
         {data: 'formula'}
         {data: 'value', readOnly: true, renderer: renderValue}
       ]
@@ -66,30 +71,13 @@ class TableWorksheet
   asText: -> @sheet.text()
 
   loadText: (text) ->
-    @loading = true
     @sheet.clear()
-    @data.length = 0
     @sheet.load text
-    @_newRow null
-    @loading = false
-
-  _dataFromDefs: (defs) -> defs.map (d) -> {name: d.name, formula: d.expr.text, value: null}
 
   _updateTable: (name, value) ->
-    @_rowForName(name)?.value = value
-    r.value = null for r in @data when !r.name or !r.value
+    @data[..] = dataFromDefAndValues(@sheet.formulasAndValues())
+    @data.push emptyRow()
     @table.render()
-
-  _rowForName: (name) ->
-    existingRow = (r for r in @data when r.name == name)[0]
-    if @loading then existingRow or @_newRow(name) else existingRow
-
-  _newRow: (name) ->
-    def = (d for d in @sheet.formulas() when d.name == name)[0]
-    row = {name: def?.name, formula: def?.expr.text, value: null}
-    @data.push row
-    row
-
 
 #module.exports = TableWorksheet
 window.TableWorksheet = TableWorksheet

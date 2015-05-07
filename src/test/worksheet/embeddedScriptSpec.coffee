@@ -29,7 +29,7 @@ describe 'Freesheet scripts embedded in pages', ->
 
     changes.should.eql [{c: 30}]
 
-  it.skip 'can create a worksheet when createWorksheets called', ->
+  it 'can create a worksheet when createWorksheets called', ->
     insertScript 'scriptTwo', '''d = 30; e = 20; f = d - e'''
     worksheetDiv = insertElement '<div class="freesheet-worksheets"></div>'
     Freesheet.loadScripts()
