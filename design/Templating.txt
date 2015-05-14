@@ -1,0 +1,7 @@
+Templating
+==========
+
+- Page has mustache-style templates
+- worksheetId.itemName
+- Need to link in worksheet updates for minimal updating
+- Re-render all every time OK for initial

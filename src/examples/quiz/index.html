@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../main/css/freesheet-web.css"/>
+    <link rel="stylesheet" href="../../main/css/handsontable.full.css"/>
+    <script src="../../main/js/lib/jquery.js"></script>
+    <script src="../../main/js/lib/handsontable.full.js"></script>
+    <script src="../../main/js/lib/freesheet.js"></script>
+    <script src="../../main/js/web/FreesheetWeb.js"></script>
+    <script src="../../main/js/worksheet/TableWorksheet.js"></script>
+
+
+    <script>
+        Package = (typeof Package != 'undefined') ? Package : {};
+        Meteor = (typeof Meteor != 'undefined') ? Meteor : {
+            isClient: true,
+            _setImmediate: function(func) { setTimeout(func, 0);  }
+        };
+    </script>
+    <script src="underscore.js"></script>
+    <script src="tracker.js"></script>
+    <script src="htmljs.js"></script>
+    <script src="html-tools.js"></script>
+    <script src="reactive-var.js"></script>
+    <script src="blaze.js"></script>
+    <script src="blaze-tools.js"></script>
+    <script src="templating.js"></script>
+    <script src="spacebars-compiler.js"></script>
+    <script src="spacebars.js"></script>
+    <script src="base64.js"></script>
+    <script src="ejson.js"></script>
+    <script src="reactive-dict.js"></script>
+
+    <title>Freesheet</title>
+</head>
+<body>
+<h1>The Quiz</h1>
+
+<div id="template" class="content" style="margin: 2em;">
+    This part is a template.
+    The answer is {{meaning}}.
+    The answer from data is {{dataVal 'meaning'}}.
+    The answer from sheet is {{sheetVal 'meaning'}}.
+</div>
+
+<div id="rendered"></div>
+
+<div id="quizWorksheet" class="freesheet-worksheets"></div>
+
+<script id="quiz" type="text/freesheet">
+        questions = [
+            {question: "water", answer: "l'aqua"},
+            {question: "sea", answer: "il mare"},
+            {question: "boat", answer: "il barco"},
+            {question: "wave", answer: "l'onda"}
+        ];
+
+        meaning = 142;
+
+</script>
+
+<script>
+    Freesheet.loadScripts();
+    Freesheet.createWorksheets();
+</script>
+
+<script>
+    var renderer = eval(SpacebarsCompiler.compile($('#template').text(), {isTemplate: true}));
+    var template1 = UI.Template("template1", renderer);
+    var data = new ReactiveDict();
+    data.set('meaning', 42);
+
+    var quizSheet = Freesheet.sheets('quiz');
+    var sheetData = new ReactiveDict();
+    quizSheet.formulasAndValues().forEach(function(fav) { sheetData.set(fav.name, fav.value)});
+    quizSheet.onChange(function(name, value) { sheetData.set(name, value)});
+
+    template1.helpers({
+        meaning: function() { return 43;},
+        dataVal: function(item) { return data.get(item);},
+        sheetVal: function(item) { return sheetData.get(item);}
+    });
+    var parentNode = $('#rendered').get(0);
+    Blaze.render(template1, parentNode);
+    setInterval(function() { data.set('meaning', data.get('meaning') + 1)}, 1000);
+    setInterval(function() { quizSheet.update('meaning', sheetData.get('meaning') + 1)}, 1000);
+</script>
+</body>
+</html>
