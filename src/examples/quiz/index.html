@@ -15,7 +15,21 @@
         Package = (typeof Package != 'undefined') ? Package : {};
         Meteor = (typeof Meteor != 'undefined') ? Meteor : {
             isClient: true,
-            _setImmediate: function(func) { setTimeout(func, 0);  }
+            _setImmediate: function(func) { setTimeout(func, 0);  },
+            _inherits: function (Child, Parent) {
+                for (var key in Parent) {
+                    if (_.has(Parent, key))
+                        Child[key] = Parent[key];
+                }
+
+                var Middle = function () {
+                    this.constructor = Child;
+                };
+                Middle.prototype = Parent.prototype;
+                Child.prototype = new Middle();
+                Child.__super__ = Parent.prototype;
+                return Child;
+            }
         };
     </script>
     <script src="underscore.js"></script>
@@ -23,13 +37,16 @@
     <script src="htmljs.js"></script>
     <script src="html-tools.js"></script>
     <script src="reactive-var.js"></script>
+    <script src="id-map.js"></script>
+    <script src="base64.js"></script>
+    <script src="ejson.js"></script>
+    <script src="minimongo.js"></script>
+    <script src="observe-sequence.js"></script>
     <script src="blaze.js"></script>
     <script src="blaze-tools.js"></script>
     <script src="templating.js"></script>
     <script src="spacebars-compiler.js"></script>
     <script src="spacebars.js"></script>
-    <script src="base64.js"></script>
-    <script src="ejson.js"></script>
     <script src="reactive-dict.js"></script>
 
     <title>Freesheet</title>
@@ -42,6 +59,12 @@
     The answer is {{meaning}}.
     The answer from data is {{dataVal 'meaning'}}.
     The answer from sheet is {{sheetVal 'meaning'}}.
+
+    <ul>
+        {{#each fixedQuestions}}
+        <li>Q: {{question}}  A: {{answer}}</li>
+        {{/each}}
+    </ul>
 </div>
 
 <div id="rendered"></div>
@@ -66,7 +89,7 @@
 </script>
 
 <script>
-    var renderer = eval(SpacebarsCompiler.compile($('#template').text(), {isTemplate: true}));
+    var renderer = eval(SpacebarsCompiler.compile($('#template').html(), {isTemplate: true}));
     var template1 = UI.Template("template1", renderer);
     var data = new ReactiveDict();
     data.set('meaning', 42);
@@ -77,6 +100,12 @@
     quizSheet.onChange(function(name, value) { sheetData.set(name, value)});
 
     template1.helpers({
+            fixedQuestions: function() { return  [
+                {question: "water", answer: "l'aqua"},
+                {question: "sea", answer: "il mare"},
+                {question: "boat", answer: "il barco"},
+                {question: "wave", answer: "l'onda"}
+            ]},
         meaning: function() { return 43;},
         dataVal: function(item) { return data.get(item);},
         sheetVal: function(item) { return sheetData.get(item);}

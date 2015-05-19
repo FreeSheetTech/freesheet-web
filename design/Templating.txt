@@ -5,3 +5,8 @@ Templating
 - worksheetId.itemName
 - Need to link in worksheet updates for minimal updating
 - Re-render all every time OK for initial
+- Tables with rows repeating on each may be a problem
+  - can't put {{#each}} around <tr> elements in WYSIWYG
+  - browser parser moves the tags outside the table when do $(template).html()
+- Repeating block Poss 1: define own helper that goes outside the table or ul but applies to element inside it
+- If dynamically add functions to ReactiveDict for each value put into it, can you use it in templates?
