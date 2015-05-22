@@ -7,6 +7,8 @@
     <script src="../../main/js/lib/jquery.js"></script>
     <script src="../../main/js/lib/handsontable.full.js"></script>
     <script src="../../main/js/lib/freesheet.js"></script>
+    <script src="../../main/js/web/FreesheetWeb.js"></script>
+    <script src="../../main/js/worksheet/TableWorksheet.js"></script>
 
 
     <script src="js/meteor-skeleton.js"></script>
@@ -26,10 +28,6 @@
     <script src="js/spacebars-compiler.js"></script>
     <script src="js/spacebars.js"></script>
     <script src="js/reactive-dict.js"></script>
-
-    <script src="../../main/js/web/FreesheetWeb.js"></script>
-    <script src="../../main/js/worksheet/TableWorksheet.js"></script>
-    <script src="../../main/js/template/ReactiveTemplate.js"></script>
 
     <title>Freesheet</title>
 </head>
@@ -87,11 +85,59 @@
 </script>
 
 <script>
-    var template = ReactiveTemplate.makeTemplate('#template');
-    ReactiveTemplate.renderTemplate(template, '#rendered');
+    function eachTableBody(html, eachExpr) {
+        var re = /<tbody>([\s\S]+)<\/tbody>/m;
+        var eachStartTag = "{{#each " + eachExpr + "}}";
+        var replacement = "<tbody>" + eachStartTag + "$1" + "{{/each}}" + "</tbody>"
+        return html.replace(re, replacement);
+    }
 
+    function eachListBody(html, eachExpr) {
+        var re = /(<ul.*?>|<ol.*?>)([\s\S]+)(<\/ul>|<\/ol>)/m;
+        var eachStartTag = "{{#each " + eachExpr + "}}";
+        var replacement = "$1" + eachStartTag + "$2" + "{{/each}}" + "$3"
+        return html.replace(re, replacement);
+    }
+
+    function makeEach(match, eachExpr, body) {
+        var bodyEl = $(body);
+        if (bodyEl.length > 1) return body;
+        if (bodyEl.filter('table').length == 1) {
+            return eachTableBody(body, eachExpr)
+        }
+
+        if (bodyEl.filter('ul,ol').length == 1) {
+            return eachListBody(body, eachExpr)
+        }
+
+        return body;
+    }
+
+    function preProcessTags(html) {
+        var re = /\{\{#eachInside (.+)\}\}([\s\S]+?)\{\{\/eachInside\}\}/gm;
+        return html.replace(re, makeEach);
+    }
+
+    var templateHtml = $('#template').html();
+    templateHtml = preProcessTags(templateHtml);
+    console.log("templateHtml = " + templateHtml);
+    var renderer = eval(SpacebarsCompiler.compile(templateHtml, {isTemplate: true}));
+    var template1 = UI.Template("template1", renderer);
+    var quizSheet = Freesheet.sheets('quiz');
+    var sheetData = new ReactiveDict();
+    quizSheet.formulasAndValues().forEach(function(fav) {
+        sheetData.set(fav.name, fav.value);
+        sheetData[fav.name] = function() { return sheetData.get(fav.name)};
+    });
+    quizSheet.onChange(function(name, value) { sheetData.set(name, value)});
+
+    template1.helpers({
+        sheetVal: function(item) { return sheetData.get(item);},
+        quiz: function() { return sheetData;}
+    });
+    var parentNode = $('#rendered').get(0);
+    Blaze.render(template1, parentNode);
     $('.newQuestion').on('click', function(){
-        var quizSheet = Freesheet.sheets('quiz');
         var questions = quizSheet.formulaText('questions');
         var ans = Date.now() % 1000;
         newQuestion = "{question: \"q" + ans + "\", answer: " + "\"a" + ans + "\"" + "}";
