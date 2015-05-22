@@ -9,4 +9,8 @@ Templating
   - can't put {{#each}} around <tr> elements in WYSIWYG
   - browser parser moves the tags outside the table when do $(template).html()
 - Repeating block Poss 1: define own helper that goes outside the table or ul but applies to element inside it
+- Repeating block Poss 2: define own helper that is actually pre-processed to insert #each in corrrect place
 - If dynamically add functions to ReactiveDict for each value put into it, can you use it in templates?
+- How create ReactiveDict - auto for each sheet?
+- ReactiveDicts parts of Freesheet object?  Simplicity vs flexibility
+- Add RDs to the template as helpers?

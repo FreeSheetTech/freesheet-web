@@ -11,43 +11,23 @@
     <script src="../../main/js/worksheet/TableWorksheet.js"></script>
 
 
-    <script>
-        Package = (typeof Package != 'undefined') ? Package : {};
-        Meteor = (typeof Meteor != 'undefined') ? Meteor : {
-            isClient: true,
-            _setImmediate: function(func) { setTimeout(func, 0);  },
-            _inherits: function (Child, Parent) {
-                for (var key in Parent) {
-                    if (_.has(Parent, key))
-                        Child[key] = Parent[key];
-                }
-
-                var Middle = function () {
-                    this.constructor = Child;
-                };
-                Middle.prototype = Parent.prototype;
-                Child.prototype = new Middle();
-                Child.__super__ = Parent.prototype;
-                return Child;
-            }
-        };
-    </script>
-    <script src="underscore.js"></script>
-    <script src="tracker.js"></script>
-    <script src="htmljs.js"></script>
-    <script src="html-tools.js"></script>
-    <script src="reactive-var.js"></script>
-    <script src="id-map.js"></script>
-    <script src="base64.js"></script>
-    <script src="ejson.js"></script>
-    <script src="minimongo.js"></script>
-    <script src="observe-sequence.js"></script>
-    <script src="blaze.js"></script>
-    <script src="blaze-tools.js"></script>
-    <script src="templating.js"></script>
-    <script src="spacebars-compiler.js"></script>
-    <script src="spacebars.js"></script>
-    <script src="reactive-dict.js"></script>
+    <script src="js/meteor-skeleton.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/htmljs.js"></script>
+    <script src="js/html-tools.js"></script>
+    <script src="js/reactive-var.js"></script>
+    <script src="js/id-map.js"></script>
+    <script src="js/base64.js"></script>
+    <script src="js/ejson.js"></script>
+    <script src="js/minimongo.js"></script>
+    <script src="js/observe-sequence.js"></script>
+    <script src="js/blaze.js"></script>
+    <script src="js/blaze-tools.js"></script>
+    <script src="js/templating.js"></script>
+    <script src="js/spacebars-compiler.js"></script>
+    <script src="js/spacebars.js"></script>
+    <script src="js/reactive-dict.js"></script>
 
     <title>Freesheet</title>
 </head>
@@ -56,15 +36,31 @@
 
 <div id="template" class="content" style="margin: 2em;">
     This part is a template.
-    The answer is {{meaning}}.
-    The answer from data is {{dataVal 'meaning'}}.
-    The answer from sheet is {{sheetVal 'meaning'}}.
+    The meaning from the sheet is {{quiz.meaning}}.
 
+    <p>Questions inside table</p>
+    {{#eachInside quiz.questions}}
+    <table>
+        <tr><td>Q: {{question}}</td>  <td>A: {{answer}}</td></tr>
+    </table>
+    {{/eachInside}}
+
+    <p>Questions inside ul</p>
+    {{#eachInside quiz.questions}}
     <ul>
-        {{#each fixedQuestions}}
+        <li>Q: {{question}}  A: {{answer}}</li>
+    </ul>
+    {{/eachInside}}
+
+    <p>Questions in ul</p>
+    <ul>
+        {{#each quiz.questions}}
         <li>Q: {{question}}  A: {{answer}}</li>
         {{/each}}
     </ul>
+
+    <button class="newMeaning">New Meaning</button>
+    <button class="newQuestion">New Question</button>
 </div>
 
 <div id="rendered"></div>
@@ -89,31 +85,65 @@
 </script>
 
 <script>
-    var renderer = eval(SpacebarsCompiler.compile($('#template').html(), {isTemplate: true}));
-    var template1 = UI.Template("template1", renderer);
-    var data = new ReactiveDict();
-    data.set('meaning', 42);
+    function eachTableBody(html, eachExpr) {
+        var re = /<tbody>([\s\S]+)<\/tbody>/m;
+        var eachStartTag = "{{#each " + eachExpr + "}}";
+        var replacement = "<tbody>" + eachStartTag + "$1" + "{{/each}}" + "</tbody>"
+        return html.replace(re, replacement);
+    }
 
+    function eachListBody(html, eachExpr) {
+        var re = /(<ul.*?>|<ol.*?>)([\s\S]+)(<\/ul>|<\/ol>)/m;
+        var eachStartTag = "{{#each " + eachExpr + "}}";
+        var replacement = "$1" + eachStartTag + "$2" + "{{/each}}" + "$3"
+        return html.replace(re, replacement);
+    }
+
+    function makeEach(match, eachExpr, body) {
+        var bodyEl = $(body);
+        if (bodyEl.length > 1) return body;
+        if (bodyEl.filter('table').length == 1) {
+            return eachTableBody(body, eachExpr)
+        }
+
+        if (bodyEl.filter('ul,ol').length == 1) {
+            return eachListBody(body, eachExpr)
+        }
+
+        return body;
+    }
+
+    function preProcessTags(html) {
+        var re = /\{\{#eachInside (.+)\}\}([\s\S]+?)\{\{\/eachInside\}\}/gm;
+        return html.replace(re, makeEach);
+    }
+
+    var templateHtml = $('#template').html();
+    templateHtml = preProcessTags(templateHtml);
+    console.log("templateHtml = " + templateHtml);
+    var renderer = eval(SpacebarsCompiler.compile(templateHtml, {isTemplate: true}));
+    var template1 = UI.Template("template1", renderer);
     var quizSheet = Freesheet.sheets('quiz');
     var sheetData = new ReactiveDict();
-    quizSheet.formulasAndValues().forEach(function(fav) { sheetData.set(fav.name, fav.value)});
+    quizSheet.formulasAndValues().forEach(function(fav) {
+        sheetData.set(fav.name, fav.value);
+        sheetData[fav.name] = function() { return sheetData.get(fav.name)};
+    });
     quizSheet.onChange(function(name, value) { sheetData.set(name, value)});
 
     template1.helpers({
-            fixedQuestions: function() { return  [
-                {question: "water", answer: "l'aqua"},
-                {question: "sea", answer: "il mare"},
-                {question: "boat", answer: "il barco"},
-                {question: "wave", answer: "l'onda"}
-            ]},
-        meaning: function() { return 43;},
-        dataVal: function(item) { return data.get(item);},
-        sheetVal: function(item) { return sheetData.get(item);}
+        sheetVal: function(item) { return sheetData.get(item);},
+        quiz: function() { return sheetData;}
     });
     var parentNode = $('#rendered').get(0);
     Blaze.render(template1, parentNode);
-    setInterval(function() { data.set('meaning', data.get('meaning') + 1)}, 1000);
-    setInterval(function() { quizSheet.update('meaning', sheetData.get('meaning') + 1)}, 1000);
+    $('.newQuestion').on('click', function(){
+        var questions = quizSheet.formulaText('questions');
+        var ans = Date.now() % 1000;
+        newQuestion = "{question: \"q" + ans + "\", answer: " + "\"a" + ans + "\"" + "}";
+        newQuestions = questions.replace(']', ", " + newQuestion + "]");
+        quizSheet.update('questions', newQuestions);
+    });
 </script>
 </body>
 </html>
