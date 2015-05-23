@@ -10,3 +10,42 @@ Quiz Example
 - Start button shows questions and starts timer
 - Game over when all answered or out of time
 - Show final result
+
+
+Combining questions and entered answers
+---------------------------------------
+
+- Stream of questions - probably just one value
+- Each entered answer gives an event
+- Could treat this as:
+  - one stream of name-value pair events (not a subject)
+  - one stream of name-value pair arrays for all inputs on page
+  - one stream of name-value single-pair map arrays for all inputs on page
+  - one stream of name-value maps for all inputs on page
+  - one stream of name-value maps for a selected set of inputs
+  - many streams of values, one for each input
+- The actual names depend on the data
+- There will also be fixed inputs with known names where one stream for each is best
+- Need a function to combine the streams
+- Or need a transform function that pulls in a single value, and apply that to each item in the question array
+- Need an intuitive way to express it in functions
+
+
+Possible answer expressions
+---------------------------
+
+- enteredAnswers = inputs
+- enteredAnswers = filter(inputs, it.class == "expected-answer")
+- enteredAnswers = inputs(it.class == "expected-answer")
+
+- combinedAnswers = join(questions, enteredAnswers, "id")
+- combinedAnswers = foreach(questions, in + {entered: enteredAnswers[in.id]})
+- combinedAnswers = foreach(questions, in + {entered: enteredAnswers(in.id)})
+- combinedAnswers = foreach(questions, in + {entered: inputs("q" + in.id)})
+- combinedAnswers = foreach(questions, merge(in, {entered: input("q" + in.id)}))
+
+Needed
+------
+- foreach
+- merge
+- input

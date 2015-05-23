@@ -28,6 +28,7 @@
     <script src="js/reactive-dict.js"></script>
 
     <script src="../../main/js/web/FreesheetWeb.js"></script>
+    <script src="../../main/js/web/PageFunctions.js"></script>
     <script src="../../main/js/worksheet/TableWorksheet.js"></script>
     <script src="../../main/js/template/ReactiveTemplate.js"></script>
 
@@ -37,29 +38,13 @@
 <h1>The Quiz</h1>
 
 <div id="template" class="content" style="margin: 2em;">
-    This part is a template.
-    The meaning from the sheet is {{quiz.meaning}}.
 
-    <p>Questions inside table</p>
+    <p>Questions</p>
     {{#eachInside quiz.questions}}
     <table>
-        <tr><td>Q: {{question}}</td>  <td>A: {{answer}}</td></tr>
+        <tr><td>{{question}}</td>  <td><input name="q{{id}}"></td></tr>
     </table>
     {{/eachInside}}
-
-    <p>Questions inside ul</p>
-    {{#eachInside quiz.questions}}
-    <ul>
-        <li>Q: {{question}}  A: {{answer}}</li>
-    </ul>
-    {{/eachInside}}
-
-    <p>Questions in ul</p>
-    <ul>
-        {{#each quiz.questions}}
-        <li>Q: {{question}}  A: {{answer}}</li>
-        {{/each}}
-    </ul>
 
     <button class="newMeaning">New Meaning</button>
     <button class="newQuestion">New Question</button>
@@ -71,15 +56,20 @@
 
 <script id="quiz" type="text/freesheet">
         questions = [
-            {question: "water", answer: "l'aqua"},
-            {question: "sea", answer: "il mare"},
-            {question: "boat", answer: "il barco"},
-            {question: "wave", answer: "l'onda"}
+            {id: 1, question: "water", answer: "l'aqua"},
+            {id: 2, question: "sea", answer: "il mare"},
+            {id: 3, question: "boat", answer: "il barco"},
+            {id: 4, question: "wave", answer: "l'onda"}
         ];
+
+        questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer, entered: "XXX"});
 
         meaning = 142;
 
 </script>
+
+questionsWithAnswers = foreach(questions, merge(in, {entered: inputs("q" + in.id)}));
+
 
 <script>
     Freesheet.loadScripts();

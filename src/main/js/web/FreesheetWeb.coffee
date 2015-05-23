@@ -6,6 +6,7 @@ freesheetWeb = {
   loadScripts: -> $("script").filter( -> $(this).attr('type') == 'text/freesheet').each (i, el) ->
     scriptEl = $(this)
     sheet = Freesheet.createSheet(scriptEl.attr('id'));
+    sheet.addFunctions PageFunctions
     sheet.load(scriptEl.text());
 
   createWorksheets: ->
