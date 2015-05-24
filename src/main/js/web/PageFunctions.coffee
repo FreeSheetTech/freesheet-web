@@ -1,12 +1,25 @@
 Rx = Freesheet.rx
 
-pageFunctions =
-  input: (inputName) ->
-    isNumeric = (s) -> s and s.match(/^\d*\.?\d+$|^\d+.?\d*$/)
-    convertValue = (s)  -> if isNumeric(s) then parseFloat(s) else s
+makeInputObservable = ->
+  isNumeric = (s) -> s and s.match(/^\d*\.?\d+$|^\d+.?\d*$/)
+  convertValue = (s)  -> if isNumeric(s) then parseFloat(s) else s
 
-    inputEl = $("input[name='#{inputName}']")
-    Rx.Observable.fromEvent(inputEl, 'change').map((e) -> e.target.value).startWith(inputEl.val()).map(convertValue)
+  inputValues = {}
+  inputValuesFunction = (e) ->
+    inputEl = $(e.target)
+    inputValues[inputEl.attr('name')] = convertValue(inputEl.val())
+    copyValues = $.extend({}, inputValues)
+    (name) -> copyValues[name]
+
+  isTextInputWithName = (el) ->
+    el.prop('tagName') == 'INPUT' and el.prop('type') == 'text' and el.prop('name')
+  changes = Rx.Observable.fromEvent($(document), 'change')
+  events = changes.filter((e) -> isTextInputWithName($(e.target))).map(inputValuesFunction).startWith(-> null)
+  events
+
+
+pageFunctions =
+  input: makeInputObservable()
 
   click: (elementId) ->
     el = $("#" + elementId.value)

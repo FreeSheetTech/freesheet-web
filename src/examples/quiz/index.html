@@ -62,7 +62,7 @@
             {id: 4, question: "wave", answer: "l'onda"}
         ];
 
-        questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer, entered: "XXX"});
+        questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer, entered: input("q"+in.id)});
 
         meaning = 142;
 
