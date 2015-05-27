@@ -8,12 +8,13 @@
     <style>
         td.mark {
             width: 1em;
+            padding: 3px;
         }
         td.mark.correct {
-            background-color: #4e9f00;
+            background-color: #79f70f;
         }
         td.mark.incorrect {
-            background-color: #ad0000;
+            background-color: #fc6b75;
         }
     </style>
     <script src="../../main/js/lib/jquery.js"></script>
@@ -49,7 +50,9 @@
 <body>
 <h1>The Quiz</h1>
 
-<div id="template" class="content" style="margin: 2em;">
+<div id="template" style="margin: 2em; display: none;">
+
+    <p>Score: {{quiz.totalScore}}</p>
 
     <p>Questions</p>
     {{#eachInside quiz.questionsWithAnswers}}
@@ -57,19 +60,16 @@
         <tr>
             <td>{{question}}</td>
             <td><input name="q{{id}}"></td>
-            <td>{{entered}}</td>
-            <td class="mark {{#if correct}}correct{{/if}}">{{#if correct}}Yes!{{/if}}</td>
+            <td class="mark {{#if correct}}correct{{/if}} {{#if incorrect}}incorrect{{/if}}">{{#if correct}}Yes!{{/if}}{{#if incorrect}}No...{{/if}}</td>
         </tr>
     </table>
     {{/eachInside}}
 
-    <button class="newMeaning">New Meaning</button>
-    <button class="newQuestion">New Question</button>
 </div>
 
-<div id="rendered"></div>
+<div id="rendered" class="content"></div>
 
-<div id="quizWorksheet" class="freesheet-worksheets"></div>
+<div id="quizWorksheet" class="freesheet-worksheets" style="margin-top:3em;"></div>
 
 <script id="quiz" type="text/freesheet">
         questions = [
@@ -81,14 +81,14 @@
 
         questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer,
                                                         entered: input("q"+in.id),
-                                                        correct: input("q"+in.id) == in.answer});
+                                                        correct: and(input("q"+in.id), input("q"+in.id) == in.answer),
+                                                        incorrect: and(input("q"+in.id), input("q"+in.id) <> in.answer),
+                                                        score: ifElse(and(input("q"+in.id), input("q"+in.id) == in.answer), 10, 0)
+                                                        });
 
-        meaning = 142;
+        totalScore = sum(fromEach(questionsWithAnswers, in.score));
 
 </script>
-
-questionsWithAnswers = foreach(questions, merge(in, {entered: inputs("q" + in.id)}));
-
 
 <script>
     Freesheet.loadScripts();
@@ -98,15 +98,6 @@ questionsWithAnswers = foreach(questions, merge(in, {entered: inputs("q" + in.id
 <script>
     var template = ReactiveTemplate.makeTemplate('#template');
     ReactiveTemplate.renderTemplate(template, '#rendered');
-
-    $('.newQuestion').on('click', function(){
-        var quizSheet = Freesheet.sheets('quiz');
-        var questions = quizSheet.formulaText('questions');
-        var ans = Date.now() % 1000;
-        newQuestion = "{question: \"q" + ans + "\", answer: " + "\"a" + ans + "\"" + "}";
-        newQuestions = questions.replace(']', ", " + newQuestion + "]");
-        quizSheet.update('questions', newQuestions);
-    });
 </script>
 </body>
 </html>
