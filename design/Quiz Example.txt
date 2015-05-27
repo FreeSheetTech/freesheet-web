@@ -49,3 +49,8 @@ Needed
 - foreach
 - merge
 - input
+
+More expressions
+----------------
+- Intuitive to refer to items in current aggregate directly
+- Also intuitive to refer to items in incoming aggregate directly

@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../../main/css/freesheet-web.css"/>
     <link rel="stylesheet" href="../../main/css/handsontable.full.css"/>
+
+    <style>
+        td.mark {
+            width: 1em;
+        }
+        td.mark.correct {
+            background-color: #4e9f00;
+        }
+        td.mark.incorrect {
+            background-color: #ad0000;
+        }
+    </style>
     <script src="../../main/js/lib/jquery.js"></script>
     <script src="../../main/js/lib/handsontable.full.js"></script>
     <script src="../../main/js/lib/freesheet.js"></script>
@@ -40,9 +52,14 @@
 <div id="template" class="content" style="margin: 2em;">
 
     <p>Questions</p>
-    {{#eachInside quiz.questions}}
+    {{#eachInside quiz.questionsWithAnswers}}
     <table>
-        <tr><td>{{question}}</td>  <td><input name="q{{id}}"></td></tr>
+        <tr>
+            <td>{{question}}</td>
+            <td><input name="q{{id}}"></td>
+            <td>{{entered}}</td>
+            <td class="mark {{#if correct}}correct{{/if}}">{{#if correct}}Yes!{{/if}}</td>
+        </tr>
     </table>
     {{/eachInside}}
 
@@ -62,7 +79,9 @@
             {id: 4, question: "wave", answer: "l'onda"}
         ];
 
-        questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer, entered: input("q"+in.id)});
+        questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer,
+                                                        entered: input("q"+in.id),
+                                                        correct: input("q"+in.id) == in.answer});
 
         meaning = 142;
 
