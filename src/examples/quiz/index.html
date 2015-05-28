@@ -53,6 +53,8 @@
 <div id="template" style="margin: 2em; display: none;">
 
     <p>Score: {{quiz.totalScore}}</p>
+    <p>Time remaining: <progress max="{{quiz.timeAllowed}}" value = {{quiz.timeElapsed}}>{{quiz.timeLeft}}</progress></p>
+    <p>{{#if quiz.gameOver}}Game Over!{{/if}}</p>
 
     <p>Questions</p>
     {{#eachInside quiz.questionsWithAnswers}}
@@ -85,8 +87,15 @@
                                                         incorrect: and(input("q"+in.id), input("q"+in.id) <> in.answer),
                                                         score: ifElse(and(input("q"+in.id), input("q"+in.id) == in.answer), 10, 0)
                                                         });
+        answeredQuestions = select(questionsWithAnswers, in.entered);
+
 
         totalScore = sum(fromEach(questionsWithAnswers, in.score));
+        timeAllowed = 30;
+        timeElapsed = asSeconds(now - pageLoadTime);
+        timeLeft = timeAllowed - timeElapsed;
+        allAnswered = count(answeredQuestions) == count(questions);
+        gameOver = or(timeLeft < 0, allAnswered);
 
 </script>
 
