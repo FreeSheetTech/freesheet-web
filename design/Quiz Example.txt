@@ -56,3 +56,5 @@ More expressions
 - Also intuitive to refer to items in incoming aggregate directly
 - if operator
 - boolean operators
+- + for merge objects
+- none for null

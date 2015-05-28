@@ -54,8 +54,10 @@
 
     <p>Score: {{quiz.totalScore}}</p>
     <p>Time remaining: <progress max="{{quiz.timeAllowed}}" value = {{quiz.timeElapsed}}>{{quiz.timeLeft}}</progress></p>
+    <p><button name="start">Start</button></p>
     <p>{{#if quiz.gameOver}}Game Over!{{/if}}</p>
 
+    {{#if quiz.startTime}}
     <p>Questions</p>
     {{#eachInside quiz.questionsWithAnswers}}
     <table>
@@ -66,6 +68,7 @@
         </tr>
     </table>
     {{/eachInside}}
+    {{/if}}
 
 </div>
 
@@ -89,13 +92,14 @@
                                                         });
         answeredQuestions = select(questionsWithAnswers, in.entered);
 
-
+        startTime = click("start");
         totalScore = sum(fromEach(questionsWithAnswers, in.score));
         timeAllowed = 30;
-        timeElapsed = asSeconds(now - pageLoadTime);
+        timeElapsed = asSeconds(now - startTime);
         timeLeft = timeAllowed - timeElapsed;
         allAnswered = count(answeredQuestions) == count(questions);
         gameOver = or(timeLeft < 0, allAnswered);
+
 
 </script>
 
