@@ -86,9 +86,9 @@
 
         questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer,
                                                         entered: input("q"+in.id),
-                                                        correct: and(input("q"+in.id), input("q"+in.id) == in.answer),
-                                                        incorrect: and(input("q"+in.id), input("q"+in.id) <> in.answer),
-                                                        score: ifElse(and(input("q"+in.id), input("q"+in.id) == in.answer), 10, 0)
+                                                        correct: input("q"+in.id) and input("q"+in.id) == in.answer,
+                                                        incorrect: input("q"+in.id) and input("q"+in.id) <> in.answer,
+                                                        score: ifElse(input("q"+in.id) and input("q"+in.id) == in.answer, 10, 0)
                                                         });
         answeredQuestions = select(questionsWithAnswers, in.entered);
 
