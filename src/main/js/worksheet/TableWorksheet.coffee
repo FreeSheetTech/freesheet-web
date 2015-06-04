@@ -25,7 +25,8 @@ class TableWorksheet
   emptyRow = () -> {name: null, formula: null, value: null}
 
   constructor: (el, @sheet) ->
-    @sheet.onChange (name, value) => @_updateTable name, value
+    @sheet.onFormulaChange => @_rebuildTable()
+    @sheet.onValueChange (name, value) => @_updateTable name, value
     @data = (emptyRow() for i in [1..5] )
 
     @table = new Handsontable el.get(0), {
@@ -43,7 +44,7 @@ class TableWorksheet
       rowHeaders: true
     }
     @_handleEvents()
-    @_updateTable()
+    @_rebuildTable()
 
   _handleEvents: ->
     self = this
@@ -65,7 +66,7 @@ class TableWorksheet
   updateFormula: (name, formula, oldName, nextName) ->
     console.log 'updateFormula', name, formula, oldName, nextName
     if name and formula then @sheet.update name, formula, oldName, nextName
-    if name and not formula then @sheet.remove name
+    if name and not formula then @sheet.update name, 'none', oldName, nextName
     if not name and oldName then @sheet.remove oldName
 
 
@@ -75,9 +76,13 @@ class TableWorksheet
     @sheet.clear()
     @sheet.load text
 
-  _updateTable: (name, value) ->
+  _rebuildTable:  ->
     @data[..] = dataFromDefAndValues(@sheet.formulasAndValues())
     @data.push emptyRow()
+    @table.render()
+
+  _updateTable: (name, value) ->
+    row.value = value for row in @data when row.name == name
     @table.render()
 
 #module.exports = TableWorksheet

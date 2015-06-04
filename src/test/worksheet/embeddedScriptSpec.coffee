@@ -25,7 +25,7 @@ describe 'Freesheet scripts embedded in pages', ->
     s = Freesheet.sheets('scriptOne')
     changes = []
     storeChanges = (name, value) -> received = {}; received[name] = value; changes.push received
-    s.onChange storeChanges, 'c'
+    s.onValueChange storeChanges, 'c'
 
     changes.should.eql [{c: 30}]
 

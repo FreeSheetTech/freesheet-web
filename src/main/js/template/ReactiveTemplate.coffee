@@ -32,7 +32,7 @@ attachSheet = (template, sheet) ->
   attachFormula = (name, value) ->
     sheetData.set name, value
     sheetData[name] = -> sheetData.get name
-    sheet.onChange (n, v) -> sheetData.set n, v
+    sheet.onValueChange (n, v) -> sheetData.set n, v
 
   sheetData = new ReactiveDict()
   attachFormula(fav.name, fav.value) for fav in sheet.formulasAndValues()

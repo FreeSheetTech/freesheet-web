@@ -7,7 +7,7 @@ $ ->
   tableEl = $('#sheet')
 
   sheet = Freesheet.createSheet(tableEl.attr('id') or 'sheet1')
-  sheet.onChange (name, value) -> console.log("Change: " + name + " = " + value)
+  sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
   sheet.addFunctions CoreFunctions
   sheet.addFunctions TimeFunctions
   sheet.addFunctions PageFunctions
