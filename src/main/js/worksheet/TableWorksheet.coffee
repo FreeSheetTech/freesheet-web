@@ -20,7 +20,11 @@ class TableWorksheet
 
   dataFromDefAndValues = (defs) ->
     defs.map (d) ->
-      {name: d.name, formula: d.definition.expr.text, value: d.value}
+      {name: d.name, formula: d.definition.expr.text, value: displayValue(d.value)}
+
+  errorText = (error) -> "Error in formula on line #{error.line} at position #{error.columnInExpr}"
+  displayValue = (v) -> if v instanceof Error then errorText(v) else v
+
 
   emptyRow = () -> {name: null, formula: null, value: null}
 
