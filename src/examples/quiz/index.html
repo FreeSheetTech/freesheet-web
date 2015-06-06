@@ -84,8 +84,7 @@
             {id: 4, question: "wave", answer: "l'onda"}
         ];
 
-        questionsWithAnswers = fromEach(questions, {id: in.id, question: in.question, answer: in.answer,
-                                                        entered: input("q"+in.id),
+        questionsWithAnswers = fromEach(questions, in + {entered: input("q"+in.id),
                                                         correct: entered and entered == in.answer,
                                                         incorrect: entered and entered <> in.answer,
                                                         score: ifElse(correct, 10, 0)
