@@ -1,6 +1,6 @@
 Freesheet = require 'freesheet'
 CoreFunctions = require('core-functions')
-PageFunctions = require('page-functions')
+#PageFunctions = require('page-functions')
 TimeFunctions = require('time-functions')
 
 $ ->

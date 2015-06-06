@@ -1,3 +1,5 @@
+{FunctionError, CalculationError} = require 'freesheet-errors'
+
 class TableWorksheet
 
   htmlFor = (value) ->
@@ -22,8 +24,12 @@ class TableWorksheet
     defs.map (d) ->
       {name: d.name, formula: d.definition.expr.text, value: displayValue(d.value)}
 
-  errorText = (error) -> "Error in formula on line #{error.line} at position #{error.columnInExpr}"
-  displayValue = (v) -> if v instanceof Error then errorText(v) else v
+  formulaError = (error) -> "Formula error on line #{error.line} at position #{error.columnInExpr}"
+  calculationError = (error) -> "#{error.functionName}: #{error.message}"
+  displayValue = (v) -> switch
+      when v instanceof CalculationError then calculationError v
+      when v instanceof FunctionError then formulaError v
+      else v
 
 
   emptyRow = () -> {name: null, formula: null, value: null}
