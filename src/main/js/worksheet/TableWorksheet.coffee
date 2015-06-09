@@ -1,15 +1,42 @@
 {FunctionError, CalculationError} = require 'freesheet-errors'
 
+_ = require 'lodash'
+
 class TableWorksheet
+
+  isPlainObjectArray = (value) ->
+    _.isArray(value) and _.every(value, (x) -> _.isPlainObject x)
 
   htmlFor = (value) ->
     switch
       when value == null or value == undefined then ''
-      when $.isArray value then htmlForArray value
-      when $.isPlainObject value then htmlForObject value
+      when isPlainObjectArray value then htmlForObjectArray value
+      when _.isArray value then htmlForValueArray value
+      when _.isPlainObject value then htmlForObject value
       else value.toString()
 
-  htmlForArray = (value) ->
+  collectObjectKeyNames = (objects) ->
+    result = []
+    for o in objects
+      for k, v of o
+        result.push k if not _.includes result, k
+
+    result
+
+  htmlForObjectArray = (value) ->
+    console.log 'htmlForObjectArray'
+    keyNames = collectObjectKeyNames value
+    headerNames = keyNames
+    headerCell = (name) -> "<th>#{name}</th>"
+    dataCell = (obj, name) -> "<td>#{htmlFor obj[name]}</td>"
+    headerRow = "<tr>#{(headerCell x for x in headerNames).join('')}</tr>"
+    rowHtml = (obj) -> "<tr>#{(dataCell obj, x for x in keyNames).join('')}</tr>"
+    """<table class='value'>
+          #{headerRow}\n
+          #{(rowHtml x for x in value).join('\n')}
+       </table>"""
+
+  htmlForValueArray = (value) ->
     rowHtml = (x) -> "<tr><td>#{htmlFor x}</td></tr>"
     "<table class='value'> #{(rowHtml x for x in value).join('')} </table>"
 

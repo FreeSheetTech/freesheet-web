@@ -3,7 +3,7 @@ body {
 }
 
 .handsontable td.value-cell {
-    padding: 0;
+    padding: 1px 4px;
 }
 
 table.value {
@@ -11,5 +11,5 @@ table.value {
 }
 
 table.value td {
-    padding: 0;
+    padding: 1px 3px;
 }
