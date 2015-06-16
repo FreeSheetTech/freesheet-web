@@ -1,5 +1,5 @@
 Design Notes
 ============
 
-Input values
+Textbox Input values
 - can use BehaviorSubject to capture initial value, then subscribe it to the incoming events
