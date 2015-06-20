@@ -24,7 +24,7 @@ class TableWorksheet
     result
 
   htmlForObjectArray = (value) ->
-    console.log 'htmlForObjectArray'
+#    console.log 'htmlForObjectArray'
     keyNames = collectObjectKeyNames value
     headerNames = keyNames
     headerCell = (name) -> "<th>#{name}</th>"
@@ -86,7 +86,7 @@ class TableWorksheet
   _handleEvents: ->
     self = this
     @table.addHook 'afterChange', (changes, source) ->
-      console.log 'afterChange', changes
+#      console.log 'afterChange', changes
       for change in (changes or [])
         [rowIndex, propertyName, oldValue, newValue] = change
         row = self.data[rowIndex]
@@ -95,13 +95,13 @@ class TableWorksheet
         self.updateFormula row.name, row.formula, oldName, nextRowName
 
     @table.addHook 'beforeRemoveRow', (index, numberOfRows) ->
-      console.log 'beforeRemoveRow', index, numberOfRows, self.data
+#      console.log 'beforeRemoveRow', index, numberOfRows, self.data
       for row in self.data[index...index + numberOfRows]
         console.log 'Removing row', row
         self.sheet.remove row.name
 
   updateFormula: (name, formula, oldName, nextName) ->
-    console.log 'updateFormula', name, formula, oldName, nextName
+#    console.log 'updateFormula', name, formula, oldName, nextName
     if name and formula then @sheet.update name, formula, oldName, nextName
     if name and not formula then @sheet.update name, 'none', oldName, nextName
     if not name and oldName then @sheet.remove oldName
