@@ -4,6 +4,8 @@ _ = require 'lodash'
 
 class TableWorksheet
 
+  minRows = 5
+
   isPlainObjectArray = (value) ->
     _.isArray(value) and _.every(value, (x) -> _.isPlainObject x)
 
@@ -64,7 +66,7 @@ class TableWorksheet
   constructor: (el, @sheet) ->
     @sheet.onFormulaChange => @_rebuildTable()
     @sheet.onValueChange (name, value) => @_updateTable name, value
-    @data = (emptyRow() for i in [1..5] )
+    @data = []
 
     @table = new Handsontable el.get(0), {
       data: @data
@@ -96,9 +98,8 @@ class TableWorksheet
 
     @table.addHook 'beforeRemoveRow', (index, numberOfRows) ->
 #      console.log 'beforeRemoveRow', index, numberOfRows, self.data
-      for row in self.data[index...index + numberOfRows]
-        console.log 'Removing row', row
-        self.sheet.remove row.name
+      rowsToRemove = (row.name for row in self.data[index...index + numberOfRows])
+      self.sheet.remove row.name for row in rowsToRemove
 
   updateFormula: (name, formula, oldName, nextName) ->
 #    console.log 'updateFormula', name, formula, oldName, nextName
@@ -115,7 +116,8 @@ class TableWorksheet
 
   _rebuildTable:  ->
     @data[..] = dataFromDefAndValues(@sheet.formulasAndValues())
-    @data.push emptyRow()
+    rowsToShow = Math.max minRows, @data.length + 1
+    @data.push emptyRow() for i in [@data.length...rowsToShow]
     @table.render()
 
   _updateTable: (name, value) ->

@@ -17,9 +17,14 @@ To Do
     - Delete row
     - Delete multiple rows
     - Show complex types better - table
+- Allow blank rows
+- Comment rows
+    - Show 10 rows
+    - Delete row bug
+- Loading errors
 - Make showing none after new name less confusing
 - Improve css styling of worksheet
-- Show array of repeating items as a table
+    - Show array of repeating items as a table
 - Date/time formatting
 - Tidy up load/save
 - Enter complex types better - lists, aggregations
