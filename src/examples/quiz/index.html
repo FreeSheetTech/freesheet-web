@@ -48,9 +48,9 @@
     <title>Freesheet</title>
 </head>
 <body>
-<h1>The Quiz</h1>
 
-<div id="template" style="margin: 2em; display: none;">
+<div class="freesheet-template" style="margin: 2em">
+    <h1>The Quiz</h1>
 
     <p>Score: {{quiz.totalScore}}</p>
     <p>Time remaining: <progress max="{{quiz.timeAllowed}}" value = {{quiz.timeElapsed}}>{{quiz.timeLeft}}</progress></p>
@@ -72,44 +72,34 @@
 
 </div>
 
-<div id="rendered" class="content"></div>
-
-<div id="quizWorksheet" class="freesheet-worksheets" style="margin-top:3em;"></div>
-
 <script id="quiz" type="text/freesheet">
-        questions = [
-            {id: 1, question: "water", answer: "l'aqua"},
-            {id: 2, question: "sea", answer: "il mare"},
-            {id: 3, question: "boat", answer: "il barco"},
-            {id: 4, question: "wave", answer: "l'onda"}
-        ];
+    questions = [
+        {id: 1, question: "water", answer: "l'aqua"},
+        {id: 2, question: "sea", answer: "il mare"},
+        {id: 3, question: "boat", answer: "il barco"},
+        {id: 4, question: "wave", answer: "l'onda"}
+    ];
 
-        questionsWithAnswers = fromEach(questions, in + {entered: input("q"+in.id),
-                                                        correct: entered and entered == in.answer,
-                                                        incorrect: entered and entered <> in.answer,
-                                                        score: ifElse(correct, 10, 0)
-                                                        });
-        answeredQuestions = select(questionsWithAnswers, in.entered);
+    questionsWithAnswers = fromEach(questions, in + {entered: input("q"+in.id),
+                                                    correct: entered and entered == in.answer,
+                                                    incorrect: entered and entered <> in.answer,
+                                                    score: ifElse(correct, 10, 0)
+                                                    });
+    answeredQuestions = select(questionsWithAnswers, in.entered);
 
-        startTime = click("start");
-        totalScore = sum(fromEach(questionsWithAnswers, in.score));
-        timeAllowed = 30;
-        timeElapsed = asSeconds(now - startTime);
-        timeLeft = timeAllowed - timeElapsed;
-        allAnswered = count(answeredQuestions) == count(questions);
-        gameOver = or(timeLeft < 0, allAnswered);
-
-
+    startTime = click("start");
+    totalScore = sum(fromEach(questionsWithAnswers, in.score));
+    timeAllowed = 30;
+    timeElapsed = asSeconds(now - startTime);
+    timeLeft = timeAllowed - timeElapsed;
+    allAnswered = count(answeredQuestions) == count(questions);
+    gameOver = or(timeLeft < 0, allAnswered);
 </script>
 
 <script>
-    Freesheet.loadScripts();
-    Freesheet.createWorksheets();
+    Freesheet.loadScriptsIntoWorksheets();
+    ReactiveTemplate.convertTemplates();
 </script>
 
-<script>
-    var template = ReactiveTemplate.makeTemplate('#template');
-    ReactiveTemplate.renderTemplate(template, '#rendered');
-</script>
 </body>
 </html>

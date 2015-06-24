@@ -1,0 +1,13 @@
+Active pages
+============
+
+Allow active pages to be created and viewed in a browser
+
+
+To Do
+-----
+- Better template loading mechanism
+- One-line page init call
+- Meteor and freesheet web js in one dist file
+- Refactor quiz to use new stuff
+- Write out pages from editor with all scripts included - rel to editor page

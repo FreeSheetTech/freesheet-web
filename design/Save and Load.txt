@@ -1,0 +1,18 @@
+Save and Load
+=============
+
+- Save html page, sheet and data together
+- Save html page, sheet without data
+- Load all back into editing environment
+- All works live in editing environment
+- Save as standalone page - no editing possible
+- Sheet and data hidden by default in standalone page, but may show to inspect, but not change
+- Standalone page could be the container loaded for editing - extract parts
+
+Save and load data in standalone page
+-------------------------------------
+
+- Local storage
+- Separate file
+- Saves itself to file
+- PUT to server

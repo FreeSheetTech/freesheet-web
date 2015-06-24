@@ -41,28 +41,34 @@ attachSheet = (template, sheet) ->
   helpers[sheet.name] = -> sheetData
   template.helpers helpers
 
-reactiveTemplate = {
 
-  makeTemplate: (elOrSel) ->
-    templateHtml = $('#template').html()
-    preProcessedHtml = preProcessTags templateHtml
+makeTemplate = (elOrSel) ->
+  el = $(elOrSel)
+  templateHtml = el.html()
+  preProcessedHtml = preProcessTags templateHtml
 #    console.log "templateHtml", preProcessedHtml
-    renderer = eval(SpacebarsCompiler.compile(preProcessedHtml, {isTemplate: true}))
-    template = UI.Template renderer
-    attachSheet template, sheet for sheet in Freesheet.sheets()
-    template
+  renderer = eval(SpacebarsCompiler.compile(preProcessedHtml, {isTemplate: true}))
+  template = UI.Template renderer
+  attachSheet template, sheet for sheet in Freesheet.sheets()
+  template
 
 
-  renderTemplate: (template, containerElOrSel) ->
-    parentNode = $(containerElOrSel).get(0)
-    Blaze.render(template, parentNode)
+renderTemplate = (template, containerElOrSel) ->
+  parentNode = $(containerElOrSel).get(0)
+  Blaze.render(template, parentNode)
 
-  convertToTemplate: (elOrSel) ->
-    el = $(elOrSel)
-    template = makeTemplate el
-    el.empty()
-    renderTemplate template, el
-}
+convertToTemplate = (elOrSel) ->
+  el = $(elOrSel)
+  template = makeTemplate el
+  el.empty()
+  renderTemplate template, el
+  el.addClass 'rendered'
+
+convertTemplates = (sel = '.freesheet-template') ->
+  templates = $(sel)
+  convertToTemplate templates.get(i) for i in [0...templates.length]
+
+reactiveTemplate = { makeTemplate, renderTemplate, convertToTemplate, convertTemplates }
 
 if typeof module != 'undefined'
   module.exports = reactiveTemplate

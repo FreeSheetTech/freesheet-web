@@ -113,6 +113,7 @@ class TableWorksheet
   loadText: (text) ->
     @sheet.clear()
     @sheet.load text
+    @_rebuildTable()
 
   _rebuildTable:  ->
     @data[..] = dataFromDefAndValues(@sheet.formulasAndValues())
