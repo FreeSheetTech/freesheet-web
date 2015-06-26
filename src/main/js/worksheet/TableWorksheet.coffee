@@ -125,5 +125,7 @@ class TableWorksheet
     row.value = value for row in @data when row.name == name
     @table.render()
 
-#module.exports = TableWorksheet
-window.TableWorksheet = TableWorksheet
+if typeof module != 'undefined'
+  module.exports = TableWorksheet
+else
+  window.TableWorksheet = TableWorksheet

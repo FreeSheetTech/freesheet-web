@@ -20,7 +20,10 @@
     <script src="../../main/js/lib/jquery.js"></script>
     <script src="../../main/js/lib/handsontable.full.js"></script>
     <script src="../../main/js/lib/freesheet.js"></script>
-
+    <!--<script src="../../main/js/web/FreesheetWeb.js"></script>-->
+    <!--<script src="../../main/js/web/PageFunctions.js"></script>-->
+    <!--<script src="../../main/js/worksheet/TableWorksheet.js"></script>-->
+    <script src="../../../dist/freesheet-web.js"></script>
 
     <script src="js/meteor-skeleton.js"></script>
     <script src="js/underscore.js"></script>
@@ -40,9 +43,6 @@
     <script src="js/spacebars.js"></script>
     <script src="js/reactive-dict.js"></script>
 
-    <script src="../../main/js/web/FreesheetWeb.js"></script>
-    <script src="../../main/js/web/PageFunctions.js"></script>
-    <script src="../../main/js/worksheet/TableWorksheet.js"></script>
     <script src="../../main/js/template/ReactiveTemplate.js"></script>
 
     <title>Freesheet</title>
@@ -97,7 +97,7 @@
 </script>
 
 <script>
-    Freesheet.loadScriptsIntoWorksheets();
+    require('freesheet-web').loadScriptsIntoWorksheets();
     ReactiveTemplate.convertTemplates();
 </script>
 

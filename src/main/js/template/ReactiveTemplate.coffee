@@ -1,5 +1,7 @@
 # Reactive Template functions for use with Freesheet
 
+Freesheet = require 'freesheet-web'
+
 eachTableBody = (html, eachExpr) ->
   re = /<tbody>([\s\S]+)<\/tbody>/m
   eachStartTag = "{{#each " + eachExpr + "}}"

@@ -1,6 +1,8 @@
 # Top level facade for Freesheet and Freesheet Web
 
 Freesheet = require 'freesheet'
+PageFunctions = require './PageFunctions'
+TableWorksheet = require '../worksheet/TableWorksheet'
 
 loadScripts = -> $("script").filter( -> $(this).attr('type') == 'text/freesheet').each (i, el) ->
   scriptEl = $(this)

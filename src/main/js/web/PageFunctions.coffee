@@ -1,4 +1,4 @@
-Rx = Freesheet.rx
+Rx = require 'rx'
 
 makeInputObservable = ->
   isNumeric = (s) -> s and s.match(/^\d*\.?\d+$|^\d+.?\d*$/)
