@@ -18,32 +18,8 @@
         }
     </style>
     <script src="../../main/js/lib/jquery.js"></script>
-    <script src="../../main/js/lib/handsontable.full.js"></script>
     <script src="../../main/js/lib/freesheet.js"></script>
-    <!--<script src="../../main/js/web/FreesheetWeb.js"></script>-->
-    <!--<script src="../../main/js/web/PageFunctions.js"></script>-->
-    <!--<script src="../../main/js/worksheet/TableWorksheet.js"></script>-->
     <script src="../../../dist/freesheet-web.js"></script>
-
-    <script src="js/meteor-skeleton.js"></script>
-    <script src="js/underscore.js"></script>
-    <script src="js/tracker.js"></script>
-    <script src="js/htmljs.js"></script>
-    <script src="js/html-tools.js"></script>
-    <script src="js/reactive-var.js"></script>
-    <script src="js/id-map.js"></script>
-    <script src="js/base64.js"></script>
-    <script src="js/ejson.js"></script>
-    <script src="js/minimongo.js"></script>
-    <script src="js/observe-sequence.js"></script>
-    <script src="js/blaze.js"></script>
-    <script src="js/blaze-tools.js"></script>
-    <script src="js/templating.js"></script>
-    <script src="js/spacebars-compiler.js"></script>
-    <script src="js/spacebars.js"></script>
-    <script src="js/reactive-dict.js"></script>
-
-    <script src="../../main/js/template/ReactiveTemplate.js"></script>
 
     <title>Freesheet</title>
 </head>
@@ -98,7 +74,7 @@
 
 <script>
     require('freesheet-web').loadScriptsIntoWorksheets();
-    ReactiveTemplate.convertTemplates();
+    require('reactive-template').convertTemplates();
 </script>
 
 </body>
