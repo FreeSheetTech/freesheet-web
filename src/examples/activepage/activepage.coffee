@@ -1,7 +1,9 @@
 Freesheet = require 'freesheet'
-CoreFunctions = require('core-functions')
-#PageFunctions = require('page-functions')
-TimeFunctions = require('time-functions')
+CoreFunctions = require 'core-functions'
+PageFunctions = require 'page-functions'
+TimeFunctions = require 'time-functions'
+TableWorksheet = require 'table-worksheet'
+FileUtils = require 'file-utils'
 
 $ ->
   tableEl = $('#sheet')
@@ -17,18 +19,42 @@ $ ->
   fileUtils = window.fileUtils = new FileUtils();
 
   getPageText = ->
-    sheetScript = """<script type="text/freesheet">
+    pagePath = location.href.replace /\/[^/]+l$/, ''
+
+    head =  """
+              <meta charset="UTF-8">
+              <link rel="stylesheet" href="#{pagePath}/../../main/css/freesheet-web.css"/>
+              <link rel="stylesheet" href="#{pagePath}/../../main/css/handsontable.full.css"/>
+              <script src="#{pagePath}/../../main/js/lib/jquery.js"></script>
+              <script src="#{pagePath}/../../main/js/lib/freesheet.js"></script>
+              <script src="#{pagePath}/../../../dist/freesheet-web.js"></script>
+
+              <title>Freesheet Active Page</title>
+            """
+    content = """<div class="content freesheet-template">
+                       #{editor.getData()}
+                 </div>
+              """
+
+    sheetScript = """<script type="text/freesheet" id="sheet1">
                          #{worksheet.asText()}
                       </script>
                   """
-    content = """<div class="content">
-                       #{editor.getData()}
-                     </div>
+
+    initScript =  """<script>
+                      require('freesheet-web').loadScriptsIntoWorksheets();
+                      require('reactive-template').convertTemplates();
+                  </script>
                   """
+
     pageHtml = """<html>
+                    <head>
+                      #{head}
+                    </head>
                     <body>
                       #{content}
                       #{sheetScript}
+                      #{initScript}
                     </body>
                 </html>
               """

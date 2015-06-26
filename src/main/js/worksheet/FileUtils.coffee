@@ -12,4 +12,8 @@ class FileUtils
     catch error
       console.error "Could not read file: " + error
 
-window.FileUtils = FileUtils
+if typeof module != 'undefined'
+  module.exports = FileUtils
+else
+  window.FileUtils = FileUtils
+

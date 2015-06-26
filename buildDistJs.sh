@@ -38,4 +38,9 @@ node_modules/.bin/browserify -o $FSW_FILE \
   -r ./src/main/js/template/reactive-dict.js \
   -r ./src/main/js/template/ReactiveTemplate.js:reactive-template
 
-cat ./src/main/js/lib/handsontable.full.js  $METEOR_FILE $FSW_FILE > $DIST_FILE
+cat \
+    ./src/main/js/lib/handsontable.full.js \
+    ./src/main/js/lib/FileSaver.js \
+    $METEOR_FILE \
+    $FSW_FILE \
+  > $DIST_FILE

@@ -9,8 +9,28 @@ body {
     display: inherit;
 }
 
-.freesheet-worksheets {
-    margin-top: 3em;
+.freesheet-worksheets, .freesheet-worksheet {
+    margin-top: 2em;
+}
+
+.freesheet-worksheets.hidden .freesheet-worksheet {
+    display: none;
+}
+
+.freesheet-worksheets>button.show {
+    display: none;
+}
+
+.freesheet-worksheets.hidden>button.hide {
+    display: none;
+}
+
+.freesheet-worksheets>button.hide {
+    display: inherit;
+}
+
+.freesheet-worksheets.hidden>button.show {
+    display: inherit;
 }
 
 .handsontable td.value-cell {

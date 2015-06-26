@@ -10,4 +10,9 @@ To Do
     - Short includes and page init call
     - Meteor and freesheet web js in one dist file
     - Refactor quiz to use new stuff
-- Write out pages from editor with all scripts included - rel to editor page
+    - Write out pages from editor with all scripts included - rel to editor page
+
+Further dev
+-----------
+- Show worksheet with column sizes adjusted to fit
+- Load page and find correct parts to edit

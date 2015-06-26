@@ -12,10 +12,15 @@ loadScripts = -> $("script").filter( -> $(this).attr('type') == 'text/freesheet'
 
 createWorksheets = ->
   container = $('.freesheet-worksheets')
-  if not container.length then container = $('<div class="freesheet-worksheets"></div>').appendTo $('body')
+  if not container.length then container = $("""<div class="freesheet-worksheets hidden">
+                                                   <button class="show">Show worksheets</button>
+                                                   <button class="hide">Hide worksheets</button>
+                                                </div>""").appendTo $('body')
   for sheet in Freesheet.sheets()
-    worksheetEl = $("<div id='#{sheet.name}_worksheet'></div>").appendTo container
+    worksheetEl = $("""<div id="#{sheet.name}_worksheet" class="freesheet-worksheet"></div>""").appendTo container
     new TableWorksheet(worksheetEl, sheet)
+  container.on 'click', 'button.show', -> container.removeClass('hidden')
+  container.on 'click', 'button.hide', -> container.addClass('hidden')
 
 loadScriptsIntoWorksheets = ->
   loadScripts()
