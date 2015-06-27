@@ -115,6 +115,8 @@ class TableWorksheet
     @sheet.load text
     @_rebuildTable()
 
+  redisplay: -> @table.render()
+
   _rebuildTable:  ->
     @data[..] = dataFromDefAndValues(@sheet.formulasAndValues())
     rowsToShow = Math.max minRows, @data.length + 1

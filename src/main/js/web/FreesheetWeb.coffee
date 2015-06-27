@@ -16,10 +16,16 @@ createWorksheets = ->
                                                    <button class="show">Show worksheets</button>
                                                    <button class="hide">Hide worksheets</button>
                                                 </div>""").appendTo $('body')
-  for sheet in Freesheet.sheets()
+  newWorksheet = (sheet) ->
     worksheetEl = $("""<div id="#{sheet.name}_worksheet" class="freesheet-worksheet"></div>""").appendTo container
     new TableWorksheet(worksheetEl, sheet)
-  container.on 'click', 'button.show', -> container.removeClass('hidden')
+
+  worksheets = (newWorksheet(sheet) for sheet in Freesheet.sheets())
+
+  container.on 'click', 'button.show', ->
+    container.removeClass('hidden')
+    sheet.redisplay() for sheet in worksheets
+
   container.on 'click', 'button.hide', -> container.addClass('hidden')
 
 loadScriptsIntoWorksheets = ->
