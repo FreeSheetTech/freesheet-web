@@ -23,11 +23,11 @@ $ ->
 
     head =  """
               <meta charset="UTF-8">
-              <link rel="stylesheet" href="#{pagePath}/../../main/css/freesheet-web.css"/>
-              <link rel="stylesheet" href="#{pagePath}/../../main/css/handsontable.full.css"/>
-              <script src="#{pagePath}/../../main/js/lib/jquery.js"></script>
-              <script src="#{pagePath}/../../main/js/lib/freesheet.js"></script>
-              <script src="#{pagePath}/../../../dist/freesheet-web.js"></script>
+              <link rel="stylesheet" href="#{pagePath}/css/freesheet-web.css"/>
+              <link rel="stylesheet" href="#{pagePath}/css/handsontable.full.css"/>
+              <script src="#{pagePath}/js/lib/jquery.js"></script>
+              <script src="#{pagePath}/js/lib/freesheet.js"></script>
+              <script src="#{pagePath}/js/freesheet-web.js"></script>
 
               <title>Freesheet Active Page</title>
             """
