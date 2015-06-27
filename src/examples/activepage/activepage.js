@@ -15,7 +15,7 @@
   FileUtils = require('file-utils');
 
   $(function() {
-    var editor, fileLoaded, fileUtils, getPageText, loadFile, sheet, tableEl, worksheet;
+    var editor, fileLoaded, fileUtils, getPageText, loadFile, parsePage, sheet, tableEl, worksheet;
     tableEl = $('#sheet');
     sheet = Freesheet.createSheet(tableEl.attr('id') || 'sheet1');
     sheet.onValueChange(function(name, value) {
@@ -39,12 +39,25 @@
       pageHtml = "<html>\n    <head>\n      " + head + "\n    </head>\n    <body>\n      " + content + "\n      " + sheetScript + "\n      " + initScript + "\n    </body>\n</html>";
       return pageHtml;
     };
+    parsePage = function(text) {
+      var bodyEl, pageHtml, worksheetText;
+      bodyEl = $('<div id="body-mock">' + text.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>');
+      pageHtml = bodyEl.find('.freesheet-template').html();
+      worksheetText = bodyEl.find('script[type="text/freesheet"]').html();
+      return {
+        pageHtml: pageHtml,
+        worksheetText: worksheetText
+      };
+    };
     $('#save').on('click', function() {
       return fileUtils.save(getPageText(), $('#name').val());
     });
     loadFile = $('#load');
     fileLoaded = function(file, text) {
-      worksheet.loadText(text);
+      var pageHtml, worksheetText, _ref;
+      _ref = parsePage(text), pageHtml = _ref.pageHtml, worksheetText = _ref.worksheetText;
+      worksheet.loadText(worksheetText);
+      editor.setData(pageHtml);
       return $('#name').val(file.name);
     };
     return loadFile.on('change', function() {

@@ -60,11 +60,19 @@ $ ->
               """
     pageHtml
 
+  parsePage = (text) ->
+    bodyEl = $ '<div id="body-mock">' + text.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+    pageHtml = bodyEl.find('.freesheet-template').html()
+    worksheetText = bodyEl.find('script[type="text/freesheet"]').html()
+    {pageHtml, worksheetText}
+
   $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').val()
 
   loadFile = $('#load')
   fileLoaded = (file, text) ->
-    worksheet.loadText text
+    {pageHtml, worksheetText} = parsePage text
+    worksheet.loadText worksheetText
+    editor.setData pageHtml
     $('#name').val(file.name)
 
   loadFile.on 'change', -> fileUtils.load loadFile.get(0).files[0], fileLoaded
