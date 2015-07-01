@@ -11,3 +11,7 @@ body {
     padding: 0.2em 0.5em;
     display: inline-block;
 }
+
+.sheetActions {
+    margin-top: 2em;
+}

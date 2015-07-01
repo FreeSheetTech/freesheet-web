@@ -96,6 +96,7 @@ $ ->
 
   # handle events
 
+  $('#newSheet').on 'click', -> newSheet()
   $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').val()
 
   loadFile = $('#load')
