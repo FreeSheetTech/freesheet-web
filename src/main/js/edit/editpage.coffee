@@ -6,28 +6,28 @@ TableWorksheet = require 'table-worksheet'
 FileUtils = require 'file-utils'
 
 $ ->
+  freesheet = null
   sheetsEl = $('#sheets')
-  sheetCount = 0
+
+  newFreesheetEnvironment = ->
+    sheetsEl.empty()
+    freesheet?.destroy()
+    freesheet = new Freesheet()
 
   newSheet = (name, text) ->
-    sheetName = name or "Sheet#{++sheetCount}"
+    sheetName = name or "Sheet#{getWorksheets().length + 1}"
     sectionEl = $("""<div class="worksheet-section">
                         <div class="worksheet-name" contenteditable>#{sheetName}</div>
                         <div class="worksheet"></div>
                     </div>""").appendTo sheetsEl
 
-    sheet = Freesheet.createSheet sheetName
+    sheet = freesheet.createSheet sheetName
     sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
     sheet.addFunctions PageFunctions
 
     worksheet = new TableWorksheet sectionEl.find('.worksheet'), sheet
     if text then worksheet.loadText text
     sectionEl.data 'worksheet', worksheet
-
-
-  editor = CKEDITOR.replace 'editor', { extraPlugins: 'divarea'}
-  fileUtils = window.fileUtils = new FileUtils()
-  newSheet()
 
   getWorksheets = -> $('.worksheet-section').map( (i, el) -> $(el).data('worksheet')).get()
   sheetScript = (worksheet) ->
@@ -87,11 +87,21 @@ $ ->
       worksheetScripts[scriptName] = scriptText
     {pageHtml, worksheetScripts}
 
+  # initialise page
+  editor = CKEDITOR.replace 'editor', { extraPlugins: 'divarea'}
+  fileUtils = window.fileUtils = new FileUtils()
+
+  newFreesheetEnvironment()
+  newSheet()
+
+  # handle events
+
   $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').val()
 
   loadFile = $('#load')
   fileLoaded = (file, text) ->
     {pageHtml, worksheetScripts} = parsePage text
+    newFreesheetEnvironment()
     newSheet(name, script) for name, script of worksheetScripts
     editor.setData pageHtml
     $('#name').val(file.name)
