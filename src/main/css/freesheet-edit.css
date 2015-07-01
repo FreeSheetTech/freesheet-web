@@ -1,0 +1,13 @@
+body {
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+}
+
+.worksheet-section {
+    margin-top: 2em;
+}
+
+.worksheet-name {
+    border: 1px solid gray;
+    padding: 0.2em 0.5em;
+    display: inline-block;
+}

@@ -6,17 +6,35 @@ TableWorksheet = require 'table-worksheet'
 FileUtils = require 'file-utils'
 
 $ ->
-  tableEl = $('#sheet')
+  sheetsEl = $('#sheets')
+  sheetCount = 0
 
-  sheet = Freesheet.createSheet(tableEl.attr('id') or 'sheet1')
-  sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
-  sheet.addFunctions CoreFunctions
-  sheet.addFunctions TimeFunctions
-  sheet.addFunctions PageFunctions
+  newSheet = (name, text) ->
+    sheetName = name or "Sheet#{++sheetCount}"
+    sectionEl = $("""<div class="worksheet-section">
+                        <div class="worksheet-name" contenteditable>#{sheetName}</div>
+                        <div class="worksheet"></div>
+                    </div>""").appendTo sheetsEl
+
+    sheet = Freesheet.createSheet sheetName
+    sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
+    sheet.addFunctions PageFunctions
+
+    worksheet = new TableWorksheet sectionEl.find('.worksheet'), sheet
+    if text then worksheet.loadText text
+    sectionEl.data 'worksheet', worksheet
+
 
   editor = CKEDITOR.replace 'editor', { extraPlugins: 'divarea'}
-  worksheet = window.worksheet = new TableWorksheet tableEl, sheet
-  fileUtils = window.fileUtils = new FileUtils();
+  fileUtils = window.fileUtils = new FileUtils()
+  newSheet()
+
+  getWorksheets = -> $('.worksheet-section').map( (i, el) -> $(el).data('worksheet')).get()
+  sheetScript = (worksheet) ->
+    """<script type="text/freesheet" data-name="#{worksheet.name()}">
+          #{worksheet.asText()}
+       </script>
+      """
 
   getPageText = ->
     pagePath = location.href.replace /\/[^/]+l$/, ''
@@ -31,15 +49,12 @@ $ ->
 
               <title>Freesheet Active Page</title>
             """
-    content = """<div class="content freesheet-template">
+    content = """<div class="freesheet-template">
                        #{editor.getData()}
                  </div>
               """
 
-    sheetScript = """<script type="text/freesheet" id="sheet1">
-                         #{worksheet.asText()}
-                      </script>
-                  """
+    sheetScripts = (sheetScript s for s in getWorksheets()).join('\n')
 
     initScript =  """<script>
                       require('freesheet-web').loadScriptsIntoWorksheets();
@@ -53,7 +68,7 @@ $ ->
                     </head>
                     <body>
                       #{content}
-                      #{sheetScript}
+                      #{sheetScripts}
                       #{initScript}
                     </body>
                 </html>
@@ -63,15 +78,21 @@ $ ->
   parsePage = (text) ->
     bodyEl = $ '<div id="body-mock">' + text.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
     pageHtml = bodyEl.find('.freesheet-template').html()
-    worksheetText = bodyEl.find('script[type="text/freesheet"]').html()
-    {pageHtml, worksheetText}
+    freesheetScriptEls = bodyEl.find('script[type="text/freesheet"]')
+    worksheetScripts = {}
+    freesheetScriptEls.each (i, el) ->
+      script = $ el
+      scriptName = script.attr('data-name')
+      scriptText = script.html()
+      worksheetScripts[scriptName] = scriptText
+    {pageHtml, worksheetScripts}
 
   $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').val()
 
   loadFile = $('#load')
   fileLoaded = (file, text) ->
-    {pageHtml, worksheetText} = parsePage text
-    worksheet.loadText worksheetText
+    {pageHtml, worksheetScripts} = parsePage text
+    newSheet(name, script) for name, script of worksheetScripts
     editor.setData pageHtml
     $('#name').val(file.name)
 

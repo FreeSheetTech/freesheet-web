@@ -108,6 +108,7 @@ class TableWorksheet
     if not name and oldName then @sheet.remove oldName
 
 
+  name: -> @sheet.name
   asText: -> @sheet.text()
 
   loadText: (text) ->
