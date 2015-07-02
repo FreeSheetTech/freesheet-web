@@ -4,9 +4,11 @@ Freesheet = require 'freesheet'
 PageFunctions = require './PageFunctions'
 TableWorksheet = require '../worksheet/TableWorksheet'
 
+freesheet = new Freesheet()
+
 loadScripts = -> $("script").filter( -> $(this).attr('type') == 'text/freesheet').each (i, el) ->
   scriptEl = $(this)
-  sheet = Freesheet.createSheet(scriptEl.attr('id'));
+  sheet = freesheet.createSheet(scriptEl.attr('id'));
   sheet.addFunctions PageFunctions
   sheet.load(scriptEl.text());
 
@@ -20,7 +22,7 @@ createWorksheets = ->
     worksheetEl = $("""<div id="#{sheet.name}_worksheet" class="freesheet-worksheet"></div>""").appendTo container
     new TableWorksheet(worksheetEl, sheet)
 
-  worksheets = (newWorksheet(sheet) for sheet in Freesheet.sheets())
+  worksheets = (newWorksheet(sheet) for sheet in freesheet.sheets())
 
   container.on 'click', 'button.show', ->
     container.removeClass('hidden')
@@ -33,7 +35,7 @@ loadScriptsIntoWorksheets = ->
   createWorksheets()
 
 freesheetWeb = { loadScripts, createWorksheets, loadScriptsIntoWorksheets }
-freesheetWeb[key] = value for key, value of Freesheet
+freesheetWeb[key] = value for key, value of freesheet
 
 if typeof module != 'undefined'
   module.exports = freesheetWeb
