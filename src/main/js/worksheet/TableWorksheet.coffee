@@ -51,7 +51,7 @@ class TableWorksheet
 
   dataFromDefAndValues = (defs) ->
     defs.map (d) ->
-      {name: d.name, formula: d.definition.expr.text, value: displayValue(d.value)}
+      {name: d.name, formula: displayFormula(d.definition.expr), value: displayValue(d.value)}
 
   formulaError = (error) -> "Formula error on line #{error.line} at position #{error.columnInExpr}"
   calculationError = (error) -> "#{error.functionName}: #{error.message}"
@@ -60,6 +60,7 @@ class TableWorksheet
       when v instanceof FunctionError then formulaError v
       else v
 
+  displayFormula = (expr) -> if expr.text == 'none' then '' else expr.text
 
   emptyRow = () -> {name: null, formula: null, value: null}
 
