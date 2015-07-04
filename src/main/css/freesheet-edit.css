@@ -2,6 +2,10 @@ body {
     font-family: Helvetica, Arial, Verdana, sans-serif;
 }
 
+h1 {
+    font-size: 30px;
+}
+
 .worksheet-section {
     margin-top: 2em;
 }

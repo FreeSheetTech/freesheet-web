@@ -15,6 +15,10 @@ $ ->
     freesheet = new Freesheet()
 
   newSheet = (name, text) ->
+    if not name
+      alert 'You need to enter the sheet name'
+      return
+
     sheetName = name or "Sheet#{getWorksheets().length + 1}"
     sectionEl = $("""<div class="worksheet-section">
                         <div class="worksheet-name" contenteditable>#{sheetName}</div>
@@ -92,11 +96,14 @@ $ ->
   fileUtils = window.fileUtils = new FileUtils()
 
   newFreesheetEnvironment()
-  newSheet()
+  newSheet('Sheet 1')
 
   # handle events
 
-  $('#newSheet').on 'click', -> newSheet()
+  $('#newSheet').on 'click', (event) ->
+    newSheet $('#sheetName').val()
+    event.preventDefault()
+
   $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').val()
 
   loadFile = $('#load')
