@@ -47,7 +47,10 @@ $ ->
             <meta charset="UTF-8">
             <link rel="stylesheet" href="#{pagePath}/css/freesheet-web.css"/>
             <link rel="stylesheet" href="#{pagePath}/css/handsontable.full.css"/>
+            <link rel="stylesheet" href="#{pagePath}/css/bootstrap.css"/>
+            <link rel="stylesheet" href="#{pagePath}/css/bootstrap-theme.css"/>
             <script src="#{pagePath}/js/lib/jquery.js"></script>
+            <script src="#{pagePath}/js/lib/bootstrap.js"></script>
             <script src="#{pagePath}/js/lib/freesheet.js"></script>
             <script src="#{pagePath}/js/freesheet-web.js"></script>
 
@@ -91,7 +94,10 @@ $ ->
     {pageHtml, worksheetScripts}
 
   # initialise page
-  editor = CKEDITOR.replace 'editor', { extraPlugins: 'divarea'}
+  editor = CKEDITOR.replace 'editor',
+    extraPlugins: 'divarea,div,forms'
+    allowedContent: true
+
   fileUtils = window.fileUtils = new FileUtils()
 
   newFreesheetEnvironment()

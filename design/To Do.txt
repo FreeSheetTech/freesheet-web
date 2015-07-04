@@ -22,7 +22,7 @@ To Do
     - Show 10 rows
     - Delete row bug
 - Loading errors
-- Make showing none after new name less confusing
+    - Make showing none after new name less confusing
 - Improve css styling of worksheet
     - Show array of repeating items as a table
 - Date/time formatting
@@ -34,3 +34,4 @@ To Do
 - Handle evaluation errors eg property of null
 - Put row back after undo doesn't update formulas
 - Format save html and strip leading space from body when load
+- Update file name after save as
