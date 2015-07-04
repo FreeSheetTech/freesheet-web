@@ -44,39 +44,38 @@ $ ->
     pagePath = location.href.replace /\/[^/]+l$/, ''
 
     head =  """
-              <meta charset="UTF-8">
-              <link rel="stylesheet" href="#{pagePath}/css/freesheet-web.css"/>
-              <link rel="stylesheet" href="#{pagePath}/css/handsontable.full.css"/>
-              <script src="#{pagePath}/js/lib/jquery.js"></script>
-              <script src="#{pagePath}/js/lib/freesheet.js"></script>
-              <script src="#{pagePath}/js/freesheet-web.js"></script>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="#{pagePath}/css/freesheet-web.css"/>
+            <link rel="stylesheet" href="#{pagePath}/css/handsontable.full.css"/>
+            <script src="#{pagePath}/js/lib/jquery.js"></script>
+            <script src="#{pagePath}/js/lib/freesheet.js"></script>
+            <script src="#{pagePath}/js/freesheet-web.js"></script>
 
-              <title>Freesheet Active Page</title>
+            <title>Freesheet Active Page</title>
             """
-    content = """<div class="freesheet-template">
-                       #{editor.getData()}
-                 </div>
-              """
-
     sheetScripts = (sheetScript s for s in getWorksheets()).join('\n')
 
-    initScript =  """<script>
+    initScript =  """
+                  <script>
                       require('freesheet-web').loadScriptsIntoWorksheets();
                       require('reactive-template').convertTemplates();
                   </script>
                   """
 
-    pageHtml = """<html>
+    pageHtml = """
+               <html>
                     <head>
                       #{head}
                     </head>
                     <body>
-                      #{content}
+                      <div class="freesheet-template">
+                               #{editor.getData()}
+                      </div>
                       #{sheetScripts}
                       #{initScript}
                     </body>
                 </html>
-              """
+               """
     pageHtml
 
   parsePage = (text) ->
@@ -104,15 +103,16 @@ $ ->
     newSheet $('#sheetName').val()
     event.preventDefault()
 
-  $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').val()
+  $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').text()
 
-  loadFile = $('#load')
+  loadFile = $('#open')
   fileLoaded = (file, text) ->
     {pageHtml, worksheetScripts} = parsePage text
     newFreesheetEnvironment()
     newSheet(name, script) for name, script of worksheetScripts
     editor.setData pageHtml
-    $('#name').val(file.name)
+    $('#name').text(file.name)
 
+  loadFile.on 'click', -> loadFile.val('')
   loadFile.on 'change', -> fileUtils.load loadFile.get(0).files[0], fileLoaded
 

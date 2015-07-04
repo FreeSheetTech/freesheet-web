@@ -18,11 +18,12 @@
     <div class="container-fluid">
 
         <h1>Freesheet Active Page</h1>
-        <p>
-            Load file <input id="load" type="file"/>
-        </p>
-        <p>
-            Save file <input id="name" type="text"/> <button id="save">Save</button>
+        <p class="page-name">
+            <span id="name" class="lead">New page</span>
+            <button id="save" class="btn btn-default">Save as...</button>
+            <span class="btn btn-default btn-file">
+                Open... <input id="open" type="file">
+            </span>
         </p>
 
         <div id="page" class="workpage">
