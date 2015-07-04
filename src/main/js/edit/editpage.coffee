@@ -103,7 +103,8 @@ $ ->
     newSheet $('#sheetName').val()
     event.preventDefault()
 
-  $('#save').on 'click', -> fileUtils.save getPageText(), $('#name').text()
+  $('#save').on 'click', ->
+    fileUtils.save getPageText(), $('#name').text()
 
   loadFile = $('#open')
   fileLoaded = (file, text) ->
@@ -113,6 +114,6 @@ $ ->
     editor.setData pageHtml
     $('#name').text(file.name)
 
-  loadFile.on 'click', -> loadFile.val('')
+  loadFile.on 'click', -> loadFile.val ''
   loadFile.on 'change', -> fileUtils.load loadFile.get(0).files[0], fileLoaded
 
