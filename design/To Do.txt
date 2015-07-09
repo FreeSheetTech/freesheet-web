@@ -23,10 +23,11 @@ To Do
     - Delete row bug
 - Loading errors
     - Make showing none after new name less confusing
-- Improve css styling of worksheet
+    - Improve css styling of worksheet
     - Show array of repeating items as a table
 - Date/time formatting
     - Tidy up load/save
+- Upgrade Handsontable
 - Enter complex types better - lists, aggregations
 - Test in other browsers, OSes
 - Duplicate formula names

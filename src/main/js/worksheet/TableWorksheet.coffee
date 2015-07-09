@@ -12,6 +12,7 @@ class TableWorksheet
   htmlFor = (value) ->
     switch
       when value == null or value == undefined then ''
+      when _.isFunction value then 'Function'
       when isPlainObjectArray value then htmlForObjectArray value
       when _.isArray value then htmlForValueArray value
       when _.isPlainObject value then htmlForObject value
@@ -49,9 +50,26 @@ class TableWorksheet
   renderValue = (instance, td, row, col, prop, value, cellProperties) ->
     $(td).html(htmlFor(value)).addClass('value-cell')
 
+  renderName = (instance, td, row, col, prop, value, cellProperties) ->
+    def = instance.getData()[row]?.definition
+    $(td).html(htmlForFunction(def)).addClass('name-cell')
+
+  htmlForFunction = (def) ->
+    if not def then "" else displayNameAndArgs def
+
   dataFromDefAndValues = (defs) ->
     defs.map (d) ->
-      {name: d.name, formula: displayFormula(d.definition.expr), value: displayValue(d.value)}
+      definition: d.definition
+      name: d.name
+      nameAndArgs: displayNameAndArgs d.definition
+      formula: displayFormula d.definition.expr
+      value: displayValue d.value
+
+  displayNameAndArgs = (def) ->
+    if def.argDefs.length
+      argList = (arg.name for arg in def.argDefs).join(',')
+      "#{def.name}(#{argList})"
+    else def.name
 
   formulaError = (error) -> "Formula error on line #{error.line} at position #{error.columnInExpr}"
   calculationError = (error) -> "#{error.functionName}: #{error.message}"
@@ -62,7 +80,7 @@ class TableWorksheet
 
   displayFormula = (expr) -> if expr.text == 'none' then '' else expr.text
 
-  emptyRow = () -> {name: null, formula: null, value: null}
+  emptyRow = () -> {definition: null, name: null, nameAndArgs: null, formula: null, value: null}
 
   constructor: (el, @sheet) ->
     @sheet.onFormulaChange => @_rebuildTable()
@@ -76,7 +94,7 @@ class TableWorksheet
       dataSchema: emptyRow()
       colHeaders: ['Name', 'Formula', 'Value']
       columns: [
-        {data: 'name', validator: new RegExp('[A-Za-z]\w*|')}
+        {data: 'nameAndArgs', renderer: renderName}  #validator: new RegExp('[A-Za-z]\w*|')
         {data: 'formula'}
         {data: 'value', readOnly: true, renderer: renderValue}
       ]
@@ -93,20 +111,20 @@ class TableWorksheet
       for change in (changes or [])
         [rowIndex, propertyName, oldValue, newValue] = change
         row = self.data[rowIndex]
-        oldName = if propertyName == 'name' then oldValue else null
+        oldName = if propertyName == 'nameAndArgs' then row.name else null
         nextRowName = self.data[rowIndex + 1..].filter( (x) -> x.name)[0]?.name
-        self.updateFormula row.name, row.formula, oldName, nextRowName
+        self.updateFormula row.nameAndArgs, row.formula, oldName, nextRowName
 
     @table.addHook 'beforeRemoveRow', (index, numberOfRows) ->
 #      console.log 'beforeRemoveRow', index, numberOfRows, self.data
       rowsToRemove = (row.name for row in self.data[index...index + numberOfRows])
       self.sheet.remove row.name for row in rowsToRemove
 
-  updateFormula: (name, formula, oldName, nextName) ->
-#    console.log 'updateFormula', name, formula, oldName, nextName
-    if name and formula then @sheet.update name, formula, oldName, nextName
-    if name and not formula then @sheet.update name, 'none', oldName, nextName
-    if not name and oldName then @sheet.remove oldName
+  updateFormula: (nameAndArgs, formula, oldName, nextName) ->
+    console.log 'updateFormula', nameAndArgs, formula, oldName, nextName
+    if nameAndArgs and formula then @sheet.update nameAndArgs, formula, oldName, nextName
+    if nameAndArgs and not formula then @sheet.update nameAndArgs, 'none', oldName, nextName
+    if not nameAndArgs and oldName then @sheet.remove oldName
 
 
   name: -> @sheet.name
