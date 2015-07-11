@@ -25,7 +25,9 @@ makeClickObservable = ->
     copy = $.extend({}, clicks)
     (name) -> copy[name]
 
-  isButtonWithName = (el) -> el.prop('tagName') == 'BUTTON' and el.prop('name')
+  isButtonWithName = (el) ->
+    tag = el.prop('tagName')
+    (tag == 'BUTTON' or (tag == 'INPUT' and el.prop('type') == 'button')) and el.prop('name')
 
   changes = Rx.Observable.fromEvent($(document), 'click')
   events = changes.filter((e) -> isButtonWithName($(e.target))).map(clicksFunction).startWith(-> null)
@@ -33,7 +35,7 @@ makeClickObservable = ->
 
 
 pageFunctions =
-  input: makeInputObservable()
+  inputFrom: makeInputObservable()
   click: makeClickObservable()
 
 if typeof module != 'undefined'

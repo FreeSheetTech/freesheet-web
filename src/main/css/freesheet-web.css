@@ -13,23 +13,23 @@ body {
     margin-top: 2em;
 }
 
-.freesheet-worksheets.hidden .freesheet-worksheet {
+.freesheet-worksheets.worksheeets-hidden .freesheet-worksheet {
     display: none;
 }
 
-.freesheet-worksheets>button.show {
+.freesheet-worksheets>button.show-worksheets {
     display: none;
 }
 
-.freesheet-worksheets.hidden>button.hide {
+.freesheet-worksheets.worksheeets-hidden>button.hide-worksheets {
     display: none;
 }
 
-.freesheet-worksheets>button.hide {
+.freesheet-worksheets>button.hide-worksheets {
     display: inherit;
 }
 
-.freesheet-worksheets.hidden>button.show {
+.freesheet-worksheets.worksheeets-hidden>button.show-worksheets {
     display: inherit;
 }
 

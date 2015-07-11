@@ -1,0 +1,50 @@
+<html>
+     <head>
+       <meta charset="UTF-8">
+<link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/freesheet-web.css"/>
+<link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/handsontable.full.css"/>
+<link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/bootstrap.css"/>
+<link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/bootstrap-theme.css"/>
+<script src="http://localhost:63342/freesheet-web/js/lib/jquery.js"></script>
+<script src="http://localhost:63342/freesheet-web/js/lib/bootstrap.js"></script>
+<script src="http://localhost:63342/freesheet-web/js/lib/freesheet.js"></script>
+<script src="http://localhost:63342/freesheet-web/js/freesheet-web.js"></script>
+
+<title>Freesheet Active Page</title>
+     </head>
+     <body>
+       <div class="freesheet-template">
+                <div class="container">
+<h2>League Table</h2>
+
+<h3>New result&nbsp;</h3>
+<label>Home team &nbsp; &nbsp;</label><input name="homeTeam" size="20" type="text" /> <label>Home goals &nbsp;&nbsp;</label><input maxlength="2" name="homeGoals" size="2" type="text" /> <label>Away team &nbsp;&nbsp;</label><input name="awayTeam" size="20" type="text" /> <label>Away goals &nbsp;</label><input maxlength="2" name="awayGoals" size="2" type="text" />
+<p>&nbsp;<input name="enterResult" type="button" value="Enter" /></p>
+
+<p>&nbsp;</p>
+
+<h3>Current table</h3>
+
+<p>&nbsp;</p>
+</div>
+
+       </div>
+       <script type="text/freesheet" data-name="Sheet 1">
+   homeTeamInput = inputFrom("homeTeam");
+homeGoalsInput = inputFrom("homeGoals");
+awayTeamInput = inputFrom("awayTeam");
+awayGoalsInput = inputFrom("awayGoals");
+enterResult = click("enterResult");
+result = { homeTeam: homeTeamInput,
+  homeGoals: homeGoalsInput,
+ awayTeam: awayTeamInput,
+ awayGoals: awayGoalsInput};
+resultInput = onChange(enterResult, result);
+
+</script>
+       <script>
+    require('freesheet-web').loadScriptsIntoWorksheets();
+    require('reactive-template').convertTemplates();
+</script>
+     </body>
+ </html>

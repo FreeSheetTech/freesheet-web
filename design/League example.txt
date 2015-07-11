@@ -1,14 +1,14 @@
 League example
 ==============
 
-- Enter football league results one match at a time
-- Collect the results and make a leagure table
+- Enter football league results one match at a time, or one week at a time
+- Collect the results and make a league table
 - Store in local storage so can come back to them
 
 
 Need
 ----
-- Snapshot on event to take inputs when click submit button
+    - Snapshot on event to take inputs when click submit button
     - Collect over time to store inputs
 - Storage to persist inputs
     - first of a sequence
@@ -16,8 +16,8 @@ Need
     - count
     - user-defined functions with arguments
     - sortBy expression
-- differentValues
-- merge
+    - differentValues
+    - merge
 
 
 Haskell version

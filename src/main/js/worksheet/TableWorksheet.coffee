@@ -66,7 +66,7 @@ class TableWorksheet
       value: displayValue d.value
 
   displayNameAndArgs = (def) ->
-    if def.argDefs.length
+    if def.argDefs?.length
       argList = (arg.name for arg in def.argDefs).join(',')
       "#{def.name}(#{argList})"
     else def.name
