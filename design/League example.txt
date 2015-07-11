@@ -9,13 +9,13 @@ League example
 Need
 ----
 - Snapshot on event to take inputs when click submit button
-- Collect over time to store inputs
+    - Collect over time to store inputs
 - Storage to persist inputs
-- first of a sequence
-- sum
-- count
+    - first of a sequence
+    - sum
+    - count
     - user-defined functions with arguments
-- sort
+    - sortBy expression
 - differentValues
 - merge
 

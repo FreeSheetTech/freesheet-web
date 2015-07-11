@@ -1,0 +1,43 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="../../main/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../main/bower_components/polymer/polymer.html">
+
+    <link rel="stylesheet" href="http://localhost:63342/freesheet-web/src/examples/activepage/../../main/css/freesheet-web.css"/>
+    <link rel="stylesheet" href="http://localhost:63342/freesheet-web/src/examples/activepage/../../main/css/handsontable.full.css"/>
+    <script src="http://localhost:63342/freesheet-web/src/examples/activepage/../../main/js/lib/jquery.js"></script>
+    <script src="http://localhost:63342/freesheet-web/src/examples/activepage/../../main/js/lib/freesheet.js"></script>
+    <script src="http://localhost:63342/freesheet-web/src/examples/activepage/../../../dist/freesheet-web.js"></script>
+
+    <title>Freesheet Active Page</title>
+</head>
+<body>
+<div class="content freesheet-template">
+    <h2>A number</h2>
+
+    <p>&nbsp;</p>
+
+    <p>The number is {{sheet1.tt}}.</p>
+
+</div>
+<template is="dom-bind">
+    <div class="content">
+        <h2>A number in a Polymer template</h2>
+
+        <p>&nbsp;</p>
+
+        <p>The number is <span>{{sheet1.tt}}</span>.</p>
+    </div>
+</template>
+<script type="text/freesheet" id="sheet1">
+   ss = 22;
+tt = ss + 11;
+
+</script>
+<script>
+    require('freesheet-web').loadScriptsIntoWorksheets();
+    require('reactive-template').convertTemplates();
+</script>
+</body>
+</html>

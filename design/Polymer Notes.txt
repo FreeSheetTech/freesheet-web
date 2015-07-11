@@ -1,0 +1,5 @@
+Polymer Notes
+=============
+
+Binding annotations in text
+Must be wrapped in a <span> or they don't work
