@@ -34,5 +34,5 @@ To Do
 - Anonymous formulas - or auto name? Do in worksheet as auto-name, runner doesn't know
 - Handle evaluation errors eg property of null
 - Put row back after undo doesn't update formulas
-- Format save html and strip leading space from body when load
+- Format saved html and strip leading space from body when load
 - Update file name after save as

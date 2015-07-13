@@ -8,7 +8,7 @@ freesheet = new Freesheet()
 
 loadScripts = -> $("script").filter( -> $(this).attr('type') == 'text/freesheet').each (i, el) ->
   scriptEl = $(this)
-  sheet = freesheet.createSheet(scriptEl.attr('id'));
+  sheet = freesheet.createSheet(scriptEl.attr('data-name'));
   sheet.addFunctions PageFunctions
   sheet.load(scriptEl.text());
 
@@ -19,7 +19,12 @@ createWorksheets = ->
                                                    <button class="hide-worksheets">Hide worksheets</button>
                                                 </div>""").appendTo $('body')
   newWorksheet = (sheet) ->
-    worksheetEl = $("""<div id="#{sheet.name}_worksheet" class="freesheet-worksheet"></div>""").appendTo container
+    sectionEl = $("""<div class="worksheet-section">
+                        <div class="worksheet-name">#{sheet.name}</div>
+                        <div class="worksheet"></div>
+                    </div>""").appendTo container
+    worksheetId = sheet.name.replace /\s/g, '_'
+    worksheetEl = $("""<div id="#{worksheetId}_worksheet" class="freesheet-worksheet"></div>""").appendTo sectionEl
     new TableWorksheet(worksheetEl, sheet)
 
   worksheets = (newWorksheet(sheet) for sheet in freesheet.sheets())

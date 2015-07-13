@@ -33,10 +33,20 @@ makeClickObservable = ->
   events = changes.filter((e) -> isButtonWithName($(e.target))).map(clicksFunction).startWith(-> null)
   events
 
+localStore = (s, storeName) ->
+  key = "freesheet.#{storeName}"
+  itemsInStore = -> JSON.parse(window.localStorage.getItem(key)) or []
+  appendToStore = (x) ->
+    updatedItems = itemsInStore().concat x
+    window.localStorage.setItem key, JSON.stringify updatedItems
+
+  s.do(appendToStore).startWith(itemsInStore()...)
+
 
 pageFunctions =
   inputFrom: makeInputObservable()
   click: makeClickObservable()
+  localStore: localStore
 
 if typeof module != 'undefined'
   module.exports = pageFunctions

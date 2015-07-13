@@ -40,6 +40,14 @@ result = { homeTeam: homeTeamInput,
  awayTeam: awayTeamInput,
  awayGoals: awayGoalsInput};
 resultInput = onChange(enterResult, result);
+allResults = collectOver(resultInput);
+
+</script>
+<script type="text/freesheet" data-name="League">
+   results = fromSheet("Sheet 1", "allResults");
+awayTeams = fromEach(results, in.awayTeam);
+homeTeams = fromEach(results, in.homeTeam);
+teams = differentValues(homeTeams + awayTeams);
 
 </script>
        <script>
