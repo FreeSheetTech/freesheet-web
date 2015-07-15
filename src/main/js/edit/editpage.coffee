@@ -45,10 +45,10 @@ $ ->
 
     head =  """
             <meta charset="UTF-8">
-            <link rel="stylesheet" href="#{pagePath}/css/freesheet-web.css"/>
             <link rel="stylesheet" href="#{pagePath}/css/handsontable.full.css"/>
             <link rel="stylesheet" href="#{pagePath}/css/bootstrap.css"/>
             <link rel="stylesheet" href="#{pagePath}/css/bootstrap-theme.css"/>
+            <link rel="stylesheet" href="#{pagePath}/css/freesheet-web.css"/>
             <script src="#{pagePath}/js/lib/jquery.js"></script>
             <script src="#{pagePath}/js/lib/bootstrap.js"></script>
             <script src="#{pagePath}/js/lib/freesheet.js"></script>

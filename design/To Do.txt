@@ -36,3 +36,12 @@ To Do
 - Put row back after undo doesn't update formulas
 - Format saved html and strip leading space from body when load
 - Update file name after save as
+
+Bugs
+----
+- If mistake in function definition, gets very confused
+- If paste in formula with new lines, spreads it over several cells/rows
+- Worksheet value display expands as value display tables get bigger - or make draggable
+- Display boolean false as false, not blank
+- Remove row in worksheet doesn't delete the formula
+

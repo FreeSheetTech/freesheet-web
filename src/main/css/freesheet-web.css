@@ -9,11 +9,15 @@ body {
     display: inherit;
 }
 
-.freesheet-worksheets, .freesheet-worksheet {
+.freesheet-worksheets {
+    margin-left: 2em;
+}
+
+.freesheet-worksheets, .worksheet-section {
     margin-top: 2em;
 }
 
-.freesheet-worksheets.worksheeets-hidden .freesheet-worksheet {
+.freesheet-worksheets.worksheeets-hidden .worksheet-section {
     display: none;
 }
 
@@ -33,6 +37,12 @@ body {
     display: inherit;
 }
 
+.worksheet-name {
+    border: 1px solid gray;
+    padding: 0.2em 0.5em;
+    display: inline-block;
+}
+
 .handsontable td.value-cell {
     padding: 1px 4px;
 }
@@ -43,4 +53,9 @@ table.value {
 
 table.value td {
     padding: 1px 3px;
+}
+
+/* Handsontable adjustments */
+.handsontable td {
+    padding: 5px 8px;
 }

@@ -1,10 +1,10 @@
 <html>
      <head>
        <meta charset="UTF-8">
-<link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/freesheet-web.css"/>
 <link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/handsontable.full.css"/>
 <link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/bootstrap.css"/>
 <link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/bootstrap-theme.css"/>
+<link rel="stylesheet" href="http://localhost:63342/freesheet-web/css/freesheet-web.css"/>
 <script src="http://localhost:63342/freesheet-web/js/lib/jquery.js"></script>
 <script src="http://localhost:63342/freesheet-web/js/lib/bootstrap.js"></script>
 <script src="http://localhost:63342/freesheet-web/js/lib/freesheet.js"></script>
@@ -24,12 +24,26 @@
 <p>&nbsp;</p>
 
 <h3>Current table</h3>
+{{#eachInside League.leagueTable}}
 
-<p>&nbsp;</p>
-</div>
+<table border="1" cellpadding="1" cellspacing="1" class="table" style="width: 500px;">
+	<thead>
+		<tr>
+			<th scope="col">Team</th>
+			<th scope="col">Points</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{{team}}</td>
+			<td>{{points}}</td>
+		</tr>
+	</tbody>
+</table>
+{{/eachInside}}</div>
 
        </div>
-       <script type="text/freesheet" data-name="Sheet 1">
+       <script type="text/freesheet" data-name="Inputs">
    homeTeamInput = inputFrom("homeTeam");
 homeGoalsInput = inputFrom("homeGoals");
 awayTeamInput = inputFrom("awayTeam");
@@ -40,14 +54,26 @@ result = { homeTeam: homeTeamInput,
  awayTeam: awayTeamInput,
  awayGoals: awayGoalsInput};
 resultInput = onChange(enterResult, result);
-allResults = collectOver(resultInput);
 
 </script>
 <script type="text/freesheet" data-name="League">
-   results = fromSheet("Sheet 1", "allResults");
+   incomingResults = fromSheet("Inputs", "resultInput");
+results = collectOver(incomingResults);
 awayTeams = fromEach(results, in.awayTeam);
 homeTeams = fromEach(results, in.homeTeam);
 teams = differentValues(homeTeams + awayTeams);
+competitionResults = fromEach(teams, teamPoints(in));
+leagueTable = sortBy(competitionResults, 0-in.points);
+resultPoints(t, result) = {team: t,
+points: pointsFromMatch(team, result) };
+pointsFromMatch(team, result) = ifElse(winner(team, result), 3, ifElse(draw(result), 1, 0));
+winner(team, result) = team == result.homeTeam and result.homeGoals > result.awayGoals
+or team == result.awayTeam and result.awayGoals > result.homeGoals;
+draw(result) = result.homeGoals == result.awayGoals;
+teamResults(team) = select(results, isInvolved(in, team));
+isInvolved(result, team) = team == result.homeTeam or team == result.awayTeam;
+totalPoints(t) = sum(fromEach(teamResults(t), resultPoints(t, in).points));
+teamPoints(t) = {team: t, points: totalPoints(t)};
 
 </script>
        <script>
