@@ -21,7 +21,11 @@
 <label>Home team &nbsp; &nbsp;</label><input name="homeTeam" size="20" type="text" /> <label>Home goals &nbsp;&nbsp;</label><input maxlength="2" name="homeGoals" size="2" type="text" /> <label>Away team &nbsp;&nbsp;</label><input name="awayTeam" size="20" type="text" /> <label>Away goals &nbsp;</label><input maxlength="2" name="awayGoals" size="2" type="text" />
 <p>&nbsp;<input name="enterResult" type="button" value="Enter" /></p>
 
-<p>&nbsp;</p>
+<h3>Enter results list</h3>
+
+<p><textarea cols="80" name="resultsList" rows="10"></textarea></p>
+
+<p><input name="enterResultsList" type="button" value="Enter" /></p>
 
 <h3>Current table</h3>
 {{#eachInside League.leagueTable}}
@@ -54,10 +58,20 @@ result = { homeTeam: homeTeamInput,
  awayTeam: awayTeamInput,
  awayGoals: awayGoalsInput};
 resultInput = onChange(enterResult, result);
+resultsListInput = inputFrom("resultsList");
+enterResultsList = click("enterResultsList");
+resultsListText = onChange(enterResultsList, resultsListInput);
+resultsFromList = fromEach(nonEmptyLines(resultsListText), getResult(in));
+getResult(line) = {homeTeam: item(1, fromCsvLine(line)),
+homeGoals: item(2, fromCsvLine(line)),
+awayTeam: item(3, fromCsvLine(line)),
+awayGoals: item(4, fromCsvLine(line))
+};
+results = resultInput;
 
 </script>
 <script type="text/freesheet" data-name="League">
-   incomingResults = fromSheet("Inputs", "resultInput");
+   incomingResults = fromSheet("Inputs", "results");
 results = collectOver(incomingResults);
 awayTeams = fromEach(results, in.awayTeam);
 homeTeams = fromEach(results, in.homeTeam);

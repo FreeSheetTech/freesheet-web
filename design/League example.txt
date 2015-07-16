@@ -19,6 +19,12 @@ Need
     - differentValues
     - merge
 
+To do
+-----
+- Work out how to merge single inputs and inputs from list
+- Clear inputs after entry
+- Only accept valid inputs
+- Error messages for invalid inputs
 
 Haskell version
 ---------------
