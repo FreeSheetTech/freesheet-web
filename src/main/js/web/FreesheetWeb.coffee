@@ -5,6 +5,7 @@ PageFunctions = require './PageFunctions'
 TableWorksheet = require '../worksheet/TableWorksheet'
 
 freesheet = new Freesheet()
+isLogging = false
 
 loadScripts = -> $("script").filter( -> $(this).attr('type') == 'text/freesheet').each (i, el) ->
   scriptEl = $(this)
@@ -27,6 +28,9 @@ createWorksheets = ->
     worksheetEl = $("""<div id="#{worksheetId}_worksheet" class="freesheet-worksheet"></div>""").appendTo sectionEl
     new TableWorksheet(worksheetEl, sheet)
 
+  logWorksheetChanges = (sheet) ->
+    sheet.onValueChange (name, value) -> if isLogging then console.log "[#{sheet.name}] #{name} = ", value
+
   worksheets = (newWorksheet(sheet) for sheet in freesheet.sheets())
 
   container.on 'click', 'button.show-worksheets', ->
@@ -35,14 +39,20 @@ createWorksheets = ->
 
   container.on 'click', 'button.hide-worksheets', -> container.addClass('worksheeets-hidden')
 
+  logWorksheetChanges sheet for sheet in freesheet.sheets()
+
+
 loadScriptsIntoWorksheets = ->
   loadScripts()
   createWorksheets()
 
-freesheetWeb = { loadScripts, createWorksheets, loadScriptsIntoWorksheets }
+logChanges = (onOff = true) -> isLogging = onOff
+
+freesheetWeb = { loadScripts, createWorksheets, loadScriptsIntoWorksheets, logChanges }
 freesheetWeb[key] = value for key, value of freesheet
 
 if typeof module != 'undefined'
   module.exports = freesheetWeb
+  window.Freesheet = freesheetWeb
 else
   window.Freesheet = freesheetWeb

@@ -57,7 +57,7 @@ result = { homeTeam: homeTeamInput,
   homeGoals: homeGoalsInput,
  awayTeam: awayTeamInput,
  awayGoals: awayGoalsInput};
-resultInput = onChange(enterResult, result);
+singleResult = onChange(enterResult, result);
 resultsListInput = inputFrom("resultsList");
 enterResultsList = click("enterResultsList");
 resultsListText = onChange(enterResultsList, resultsListInput);
@@ -67,7 +67,8 @@ homeGoals: item(2, fromCsvLine(line)),
 awayTeam: item(3, fromCsvLine(line)),
 awayGoals: item(4, fromCsvLine(line))
 };
-results = resultInput;
+unpackedResults = unpackLists(resultsFromList);
+results = merge(singleResult, unpackedResults);
 
 </script>
 <script type="text/freesheet" data-name="League">
