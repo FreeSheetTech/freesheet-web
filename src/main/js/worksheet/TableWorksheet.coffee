@@ -1,4 +1,5 @@
 {FunctionError, CalculationError} = require 'freesheet-errors'
+Rx = require 'rx'
 
 _ = require 'lodash'
 
@@ -83,6 +84,7 @@ class TableWorksheet
   emptyRow = () -> {definition: null, name: null, nameAndArgs: null, formula: null, value: null}
 
   constructor: (el, @sheet) ->
+    @renderQueue = new Rx.Subject()
     @sheet.onFormulaChange => @_rebuildTable()
     @sheet.onValueChange (name, value) => @_updateTable name, value
     @data = []
@@ -103,6 +105,7 @@ class TableWorksheet
     }
     @_handleEvents()
     @_rebuildTable()
+    @renderQueue.debounce(500).subscribe () => @table.render()
 
   _handleEvents: ->
     self = this
@@ -145,7 +148,8 @@ class TableWorksheet
 
   _updateTable: (name, value) ->
     row.value = value for row in @data when row.name == name
-    @table.render()
+#    @table.render()
+    @renderQueue.onNext 1
 
 if typeof module != 'undefined'
   module.exports = TableWorksheet

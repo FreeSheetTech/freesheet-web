@@ -38,6 +38,22 @@ makeClickObservable = ->
   events = changes.filter((e) -> isButtonWithName($(e.target))).map(clicksFunction).startWith(-> null)
   events
 
+makeInput = ->
+  isNumeric = (s) -> s and s.match(/^\d*\.?\d+$|^\d+.?\d*$/)
+  convertValue = (s)  -> if isNumeric(s) then parseFloat(s) else s
+
+  isTextInputWithName = (event) ->
+    el = $(event.target)
+    isInput = el.prop('tagName') == 'INPUT' and el.prop('type') == 'text'
+    isTextarea = el.prop('tagName') == 'TEXTAREA'
+    (isInput or isTextarea) and el.prop('name')
+
+  allChanges = Rx.Observable.fromEvent($(document), 'change').filter(isTextInputWithName).map (e) ->
+    inputEl = $(e.target)
+    {name: inputEl.attr('name'), value: convertValue(inputEl.val())}
+  fn = (name) -> allChanges.filter((c) -> c.name == name).map (c) -> c.value
+  streamReturn fn
+
 makeClick = ->
   isButtonWithName = (event) ->
     el = $(event.target)
@@ -59,7 +75,8 @@ localStore = (s, storeName) ->
 
 
 pageFunctions =
-  inputFrom: makeInputObservable()
+  inputFromOld: makeInputObservable()
+  inputFrom: makeInput()
   clickOld: makeClickObservable()
   click: makeClick()
   localStore: localStore
