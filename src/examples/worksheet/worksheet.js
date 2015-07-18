@@ -17,7 +17,6 @@
     });
     sheet.addFunctions(CoreFunctions);
     sheet.addFunctions(TimeFunctions);
-    sheet.addFunctions(PageFunctions);
     worksheet = window.worksheet = new TableWorksheet(tableEl, sheet);
     fileUtils = window.fileUtils = new FileUtils();
     $('#save').on('click', function() {

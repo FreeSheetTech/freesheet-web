@@ -1,6 +1,5 @@
 Freesheet = require 'freesheet'
 CoreFunctions = require('core-functions')
-#PageFunctions = require('page-functions')
 TimeFunctions = require('time-functions')
 
 $ ->
@@ -10,7 +9,6 @@ $ ->
   sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
   sheet.addFunctions CoreFunctions
   sheet.addFunctions TimeFunctions
-  sheet.addFunctions PageFunctions
 
   worksheet = window.worksheet = new TableWorksheet tableEl, sheet
   fileUtils = window.fileUtils = new FileUtils();

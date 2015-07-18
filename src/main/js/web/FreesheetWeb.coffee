@@ -1,16 +1,20 @@
 # Top level facade for Freesheet and Freesheet Web
 
 Freesheet = require 'freesheet'
-PageFunctions = require './PageFunctions'
+PageInputs = require './PageInputs'
 TableWorksheet = require '../worksheet/TableWorksheet'
 
 freesheet = new Freesheet()
 isLogging = false
 
+sheets = (name) -> freesheet.sheets(name)
+createSheet = (name) -> freesheet.createSheet(name)
+destroy = -> freesheet.destroy()
+
+
 loadScripts = -> $("script").filter( -> $(this).attr('type') == 'text/freesheet').each (i, el) ->
   scriptEl = $(this)
-  sheet = freesheet.createSheet(scriptEl.attr('data-name'));
-  sheet.addFunctions PageFunctions
+  sheet = createSheet(scriptEl.attr('data-name'));
   sheet.load(scriptEl.text());
 
 createWorksheets = ->
@@ -31,7 +35,7 @@ createWorksheets = ->
   logWorksheetChanges = (sheet) ->
     sheet.onValueChange (name, value) -> if isLogging then console.log "[#{sheet.name}] #{name} = ", value
 
-  worksheets = (newWorksheet(sheet) for sheet in freesheet.sheets())
+  worksheets = (newWorksheet(sheet) for sheet in sheets())
 
   container.on 'click', 'button.show-worksheets', ->
     container.removeClass('worksheeets-hidden')
@@ -39,17 +43,18 @@ createWorksheets = ->
 
   container.on 'click', 'button.hide-worksheets', -> container.addClass('worksheeets-hidden')
 
-  logWorksheetChanges sheet for sheet in freesheet.sheets()
+  logWorksheetChanges sheet for sheet in sheets()
 
+attachInputs =  -> PageInputs.attachInputs(freesheet)
 
-loadScriptsIntoWorksheets = ->
+initPage = ->
   loadScripts()
   createWorksheets()
+  PageInputs.attachInputs(freesheet)
 
 logChanges = (onOff = true) -> isLogging = onOff
 
-freesheetWeb = { loadScripts, createWorksheets, loadScriptsIntoWorksheets, logChanges }
-freesheetWeb[key] = value for key, value of freesheet
+freesheetWeb = { loadScripts, createWorksheets, attachInputs, initPage, logChanges, sheets, createSheet, destroy }
 
 if typeof module != 'undefined'
   module.exports = freesheetWeb

@@ -1,6 +1,5 @@
 Freesheet = require 'freesheet'
 CoreFunctions = require 'core-functions'
-PageFunctions = require 'page-functions'
 TimeFunctions = require 'time-functions'
 TableWorksheet = require 'table-worksheet'
 FileUtils = require 'file-utils'
@@ -27,7 +26,6 @@ $ ->
 
     sheet = freesheet.createSheet sheetName
     sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
-    sheet.addFunctions PageFunctions
 
     worksheet = new TableWorksheet sectionEl.find('.worksheet'), sheet
     if text then worksheet.loadText text
@@ -60,7 +58,7 @@ $ ->
 
     initScript =  """
                   <script>
-                      require('freesheet-web').loadScriptsIntoWorksheets();
+                      require('freesheet-web').initPage();
                       require('reactive-template').convertTemplates();
                   </script>
                   """
