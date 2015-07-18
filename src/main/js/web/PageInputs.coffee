@@ -1,4 +1,5 @@
 Rx = require 'rx'
+_ = require 'lodash'
 
 sendTextInputs = (freesheet) ->
   isNumeric = (s) -> s and s.match(/^\d*\.?\d+$|^\d+.?\d*$/)
@@ -50,7 +51,23 @@ attachInputs = (freesheet) ->
   sendTextInputs freesheet
   sendClicks freesheet
 
-pageInputs = {attachInputs}
+linkSheet = (fromSheet, toSheet) ->
+  inputs = toSheet.inputs()
+  fromSheet.onEveryValueChange (name, value) ->
+    if _.includes(inputs, name) then toSheet.partialInput name, value
+  fromSheet.onInputComplete  -> toSheet.inputComplete()
+
+linkSheetsWithInputSources = (freesheet) ->
+  $("script").filter( -> $(this).attr('type') == 'text/freesheet' and $(this).attr('data-inputsource')).each (i, el) ->
+    scriptEl = $(this)
+    toSheetName = scriptEl.attr('data-name')
+    sourceName = scriptEl.attr('data-inputsource')
+    toSheet = freesheet.sheets(toSheetName)
+    fromSheet = freesheet.sheets(sourceName)
+    linkSheet fromSheet, toSheet
+
+
+pageInputs = {attachInputs, linkSheet, linkSheetsWithInputSources}
 
 if typeof module != 'undefined'
   module.exports = pageInputs

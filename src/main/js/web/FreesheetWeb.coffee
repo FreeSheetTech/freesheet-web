@@ -51,6 +51,7 @@ initPage = ->
   loadScripts()
   createWorksheets()
   PageInputs.attachInputs(freesheet)
+  PageInputs.linkSheetsWithInputSources(freesheet)
 
 logChanges = (onOff = true) -> isLogging = onOff
 

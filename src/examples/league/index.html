@@ -74,11 +74,11 @@ unpackedResults = unpackLists(resultsFromList);
 results = merge(singleResult, unpackedResults);
 
 </script>
-<script type="text/freesheet" data-name="League">
-   incomingResults = fromSheet("Inputs", "results");
-results = collectOver(incomingResults);
-awayTeams = fromEach(results, in.awayTeam);
-homeTeams = fromEach(results, in.homeTeam);
+<script type="text/freesheet" data-name="League" data-inputsource="Inputs">
+   results = input;
+allResults = collectOver(results);
+awayTeams = fromEach(allResults, in.awayTeam);
+homeTeams = fromEach(allResults, in.homeTeam);
 teams = differentValues(homeTeams + awayTeams);
 competitionResults = fromEach(teams, teamPoints(in));
 leagueTable = sortBy(competitionResults, 0-in.points);
@@ -88,7 +88,7 @@ pointsFromMatch(team, result) = ifElse(winner(team, result), 3, ifElse(draw(resu
 winner(team, result) = team == result.homeTeam and result.homeGoals > result.awayGoals
 or team == result.awayTeam and result.awayGoals > result.homeGoals;
 draw(result) = result.homeGoals == result.awayGoals;
-teamResults(team) = select(results, isInvolved(in, team));
+teamResults(team) = select(allResults, isInvolved(in, team));
 isInvolved(result, team) = team == result.homeTeam or team == result.awayTeam;
 totalPoints(t) = sum(fromEach(teamResults(t), resultPoints(t, in).points));
 teamPoints(t) = {team: t, points: totalPoints(t)};
