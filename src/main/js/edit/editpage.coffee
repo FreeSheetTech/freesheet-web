@@ -18,16 +18,29 @@ $ ->
       alert 'You need to enter the sheet name'
       return
 
-    sheetName = name or "Sheet#{getWorksheets().length + 1}"
+    sheetNo = getWorksheets().length + 1
+    sheetName = name or "Sheet#{sheetNo}"
     sectionEl = $("""<div class="worksheet-section">
                         <div class="worksheet-name" contenteditable>#{sheetName}</div>
-                        <div class="worksheet"></div>
+                        <div class="worksheet-with-text">
+
+                          <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#sheet#{sheetNo}" aria-controls="sheet#{sheetNo}" role="tab" data-toggle="tab">Worksheet</a></li>
+                            <li role="presentation"><a href="#text#{sheetNo}" aria-controls="text#{sheetNo}" role="tab" data-toggle="tab">Text</a></li>
+                          </ul>
+
+                          <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active worksheet" id="sheet#{sheetNo}"></div>
+                            <div role="tabpanel" class="tab-pane" id="text#{sheetNo}"><pre class="text"></pre></div>
+                          </div>
+
+                        </div>
                     </div>""").appendTo sheetsEl
 
     sheet = freesheet.createSheet sheetName
     sheet.onValueChange (name, value) -> console.log("Change: " + name + " = " + value)
 
-    worksheet = new TableWorksheet sectionEl.find('.worksheet'), sheet
+    worksheet = new TableWorksheet sectionEl.find('.worksheet'), sheet, sectionEl.find('.text')
     if text then worksheet.loadText text
     sectionEl.data 'worksheet', worksheet
 

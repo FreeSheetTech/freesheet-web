@@ -26,11 +26,11 @@ createWorksheets = ->
   newWorksheet = (sheet) ->
     sectionEl = $("""<div class="worksheet-section">
                         <div class="worksheet-name">#{sheet.name}</div>
-                        <div class="worksheet"></div>
                     </div>""").appendTo container
     worksheetId = sheet.name.replace /\s/g, '_'
     worksheetEl = $("""<div id="#{worksheetId}_worksheet" class="freesheet-worksheet"></div>""").appendTo sectionEl
-    new TableWorksheet(worksheetEl, sheet)
+    handsontableEl = $("<div></div>").appendTo worksheetEl
+    new TableWorksheet(handsontableEl, sheet)
 
   logWorksheetChanges = (sheet) ->
     sheet.onValueChange (name, value) -> if isLogging then console.log "[#{sheet.name}] #{name} = ", value

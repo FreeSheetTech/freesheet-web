@@ -83,7 +83,7 @@ class TableWorksheet
 
   emptyRow = () -> {definition: null, name: null, nameAndArgs: null, formula: null, value: null}
 
-  constructor: (el, @sheet) ->
+  constructor: (el, @sheet, @textEl) ->
     @renderQueue = new Rx.Subject()
     @sheet.onFormulaChange => @_rebuildTable()
     @sheet.onValueChange (name, value) => @_updateTable name, value
@@ -145,6 +145,7 @@ class TableWorksheet
     rowsToShow = Math.max minRows, @data.length + 1
     @data.push emptyRow() for i in [@data.length...rowsToShow]
     @table.render()
+    if @textEl then @textEl.text @asText()
 
   _updateTable: (name, value) ->
     row.value = value for row in @data when row.name == name
