@@ -37,10 +37,15 @@ body {
     display: inherit;
 }
 
-.worksheet-name {
-    border: 1px solid gray;
-    padding: 0.2em 0.5em;
-    display: inline-block;
+.worksheet-section pre {
+    line-height: 1.65;
+}
+
+.nav>li>a.worksheet-name {
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: inherit;
 }
 
 .handsontable td.value-cell {
