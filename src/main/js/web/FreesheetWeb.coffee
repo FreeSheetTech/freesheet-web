@@ -6,6 +6,7 @@ TableWorksheet = require '../worksheet/TableWorksheet'
 
 freesheet = new Freesheet()
 isLogging = false
+sheetNo = 0
 
 sheets = (name) -> freesheet.sheets(name)
 createSheet = (name) -> freesheet.createSheet(name)
@@ -24,13 +25,24 @@ createWorksheets = ->
                                                    <button class="hide-worksheets">Hide worksheets</button>
                                                 </div>""").appendTo $('body')
   newWorksheet = (sheet) ->
+    sheetNo = sheetNo + 1
     sectionEl = $("""<div class="worksheet-section">
                         <div class="worksheet-name">#{sheet.name}</div>
+                        <div class="worksheet-with-text">
+
+                          <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#sheet#{sheetNo}" aria-controls="sheet#{sheetNo}" role="tab" data-toggle="tab">Worksheet</a></li>
+                            <li role="presentation"><a href="#text#{sheetNo}" aria-controls="text#{sheetNo}" role="tab" data-toggle="tab">Text</a></li>
+                          </ul>
+
+                          <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active worksheet" id="sheet#{sheetNo}"></div>
+                            <div role="tabpanel" class="tab-pane" id="text#{sheetNo}"><pre class="text"></pre></div>
+                          </div>
+
+                        </div>
                     </div>""").appendTo container
-    worksheetId = sheet.name.replace /\s/g, '_'
-    worksheetEl = $("""<div id="#{worksheetId}_worksheet" class="freesheet-worksheet"></div>""").appendTo sectionEl
-    handsontableEl = $("<div></div>").appendTo worksheetEl
-    new TableWorksheet(handsontableEl, sheet)
+    new TableWorksheet sectionEl.find('.worksheet'), sheet, sectionEl.find('.text')
 
   logWorksheetChanges = (sheet) ->
     sheet.onValueChange (name, value) -> if isLogging then console.log "[#{sheet.name}] #{name} = ", value
