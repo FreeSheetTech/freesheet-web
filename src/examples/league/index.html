@@ -83,10 +83,10 @@ teams = differentValues(homeTeams + awayTeams);
 competitionResults = fromEach(teams, teamPoints(in));
 leagueTable = sortBy(competitionResults, 0-in.points);
 resultPoints(t, result) = {team: t,
-points: pointsFromMatch(team, result) };
+  points: pointsFromMatch(team, result) };
 pointsFromMatch(team, result) = ifElse(winner(team, result), 3, ifElse(draw(result), 1, 0));
 winner(team, result) = team == result.homeTeam and result.homeGoals > result.awayGoals
-or team == result.awayTeam and result.awayGoals > result.homeGoals;
+    or team == result.awayTeam and result.awayGoals > result.homeGoals;
 draw(result) = result.homeGoals == result.awayGoals;
 teamResults(team) = select(allResults, isInvolved(in, team));
 isInvolved(result, team) = team == result.homeTeam or team == result.awayTeam;

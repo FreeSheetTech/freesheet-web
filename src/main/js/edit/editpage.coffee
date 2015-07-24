@@ -26,10 +26,23 @@ $ ->
                             <li role="presentation"  class="disabled" ><a class="worksheet-name">#{sheetName}</a></li>
                             <li role="presentation" class="active"><a href="#sheet#{sheetNo}" aria-controls="sheet#{sheetNo}" role="tab" data-toggle="tab">Worksheet</a></li>
                             <li role="presentation"><a href="#text#{sheetNo}" aria-controls="text#{sheetNo}" role="tab" data-toggle="tab">Text</a></li>
+                            <li role="presentation"><a href="#inputs#{sheetNo}" aria-controls="inputs#{sheetNo}" role="tab" data-toggle="tab">Inputs</a></li>
                           </ul>
                           <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active worksheet" id="sheet#{sheetNo}"></div>
                             <div role="tabpanel" class="tab-pane" id="text#{sheetNo}"><pre class="text"></pre></div>
+                            <div role="tabpanel" class="tab-pane" id="inputs#{sheetNo}">
+                              <form class="form-horizontal">
+                                <div class="form-group">
+                                  <label for="inputSource" class="col-sm-1 control-label">Input source</label>
+                                  <div class="col-sm-2">
+                                    <select class="form-control input-source-select">
+                                      <option>Page</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
                           </div>
                         </div>
                     </div>""").appendTo sheetsEl
@@ -40,8 +53,20 @@ $ ->
     worksheet = new TableWorksheet sectionEl.find('.worksheet'), sheet, sectionEl.find('.text')
     if text then worksheet.loadText text
     sectionEl.data 'worksheet', worksheet
+    updateSheetSelects()
 
   getWorksheets = -> $('.worksheet-section').map( (i, el) -> $(el).data('worksheet')).get()
+  updateSheetSelects = ->
+    pageOption = '<option value="_page">Page</option>'
+    $('select.input-source-select').each (i, el) ->
+      select = $(el)
+      thisSheetName = select.closest('div.worksheet-section').find('a.worksheet-name').text()
+      sheetOptions = ("""<option value="#{sheet.name}">#{sheet.name}</option>""" for sheet in freesheet.sheets() when sheet.name isnt thisSheetName)
+      selects = [pageOption].concat(sheetOptions).join '\n'
+      currentOption = select.val()
+      select.html(selects)
+      if currentOption then select.val(currentOption)
+
   sheetScript = (worksheet) ->
     """<script type="text/freesheet" data-name="#{worksheet.name()}">
           #{worksheet.asText()}
