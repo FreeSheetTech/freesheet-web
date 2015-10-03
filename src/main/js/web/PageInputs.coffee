@@ -54,8 +54,7 @@ attachInputs = (freesheet) ->
 linkSheet = (fromSheet, toSheet) ->
   inputs = toSheet.inputs()
   fromSheet.onEveryValueChange (name, value) ->
-    if _.includes(inputs, name) then toSheet.partialInput name, value
-  fromSheet.onInputComplete  -> toSheet.inputComplete()
+    if _.includes(inputs, name) then toSheet.input name, value
 
 linkSheetsWithInputSources = (freesheet) ->
   $("script").filter( -> $(this).attr('type') == 'text/freesheet' and $(this).attr('data-inputsource')).each (i, el) ->

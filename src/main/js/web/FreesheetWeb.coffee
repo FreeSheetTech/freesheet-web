@@ -57,7 +57,6 @@ createWorksheets = ->
 attachInputs =  -> PageInputs.attachInputs(freesheet)
 
 initPage = ->
-  freesheet.trace !!location.search.match('trace=on')
   loadScripts()
   createWorksheets()
   PageInputs.attachInputs(freesheet)

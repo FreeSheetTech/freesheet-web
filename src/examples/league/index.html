@@ -64,34 +64,35 @@ singleResult = onChange(enterResult, result);
 resultsListInput = input;
 enterResultsList = input;
 resultsListText = onChange(enterResultsList, resultsListInput);
-resultsFromList = fromEach(nonEmptyLines(resultsListText), getResult(in));
 getResult(line) = {homeTeam: item(1, fromCsvLine(line)),
-homeGoals: item(2, fromCsvLine(line)),
-awayTeam: item(3, fromCsvLine(line)),
-awayGoals: item(4, fromCsvLine(line))
+  homeGoals: item(2, fromCsvLine(line)),
+  awayTeam: item(3, fromCsvLine(line)),
+  awayGoals: item(4, fromCsvLine(line))
 };
-unpackedResults = unpackLists(resultsFromList);
-results = merge(singleResult, unpackedResults);
+resultList = fromEach(nonEmptyLines(resultsListText), getResult(in));
+
 
 </script>
 <script type="text/freesheet" data-name="League" data-inputsource="Inputs">
-   results = input;
-allResults = collectOver(results);
-awayTeams = fromEach(allResults, in.awayTeam);
-homeTeams = fromEach(allResults, in.homeTeam);
-teams = differentValues(homeTeams + awayTeams);
-competitionResults = fromEach(teams, teamPoints(in));
-leagueTable = sortBy(competitionResults, 0-in.points);
-resultPoints(t, result) = {team: t,
-  points: pointsFromMatch(team, result) };
-pointsFromMatch(team, result) = ifElse(winner(team, result), 3, ifElse(draw(result), 1, 0));
-winner(team, result) = team == result.homeTeam and result.homeGoals > result.awayGoals
-    or team == result.awayTeam and result.awayGoals > result.homeGoals;
-draw(result) = result.homeGoals == result.awayGoals;
-teamResults(team) = select(allResults, isInvolved(in, team));
-isInvolved(result, team) = team == result.homeTeam or team == result.awayTeam;
-totalPoints(t) = sum(fromEach(teamResults(t), resultPoints(t, in).points));
-teamPoints(t) = {team: t, points: totalPoints(t)};
+      singleResult = input;
+      resultList = input;
+      combinedResults = merge(singleResult, unpackLists(resultList));
+      allResults = all(combinedResults);
+      awayTeams = fromEach(allResults, in.awayTeam);
+      homeTeams = fromEach(allResults, in.homeTeam);
+      teams = differentValues(homeTeams + awayTeams);
+      competitionResults = fromEach(teams, teamPoints(in));
+      leagueTable = sortBy(competitionResults, 0-in.points);
+
+      resultPoints(t, result) = {team: t, points: pointsFromMatch(team, result) };
+      pointsFromMatch(team, result) = ifElse(winner(team, result), 3, ifElse(draw(result), 1, 0));
+      winner(team, result) = team == result.homeTeam and result.homeGoals > result.awayGoals
+          or team == result.awayTeam and result.awayGoals > result.homeGoals;
+      draw(result) = result.homeGoals == result.awayGoals;
+      teamResults(team) = select(allResults, isInvolved(in, team));
+      isInvolved(result, team) = team == result.homeTeam or team == result.awayTeam;
+      totalPoints(t) = sum(fromEach(teamResults(t), resultPoints(t, in).points));
+      teamPoints(t) = {team: t, points: totalPoints(t)};
 
 </script>
        <script>
