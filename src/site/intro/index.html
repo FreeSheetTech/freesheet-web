@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../main/css/handsontable.full.css"/>
+    <link rel="stylesheet" href="../../main/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../../main/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="../../main/css/freesheet-web.css"/>
+    <script src="../../main/js/lib/jquery.js"></script>
+    <script src="../../main/js/lib/bootstrap.js"></script>
+    <script src="../../main/js/lib/freesheet.js"></script>
+    <script src="../../main/js/freesheet-web.js"></script>
+    <title>Freesheet for Programmers</title>
+
+    <style>
+        body {
+            font-size: 16px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+        pre.freesheet-code {
+            white-space: pre-line;
+        }
+
+        .note {
+            font-size: 0.8;
+            font-style: italic;
+            margin-left: 30px;
+        }
+
+        .group:after {
+            visibility: hidden;
+            display: block;
+            content: "";
+            clear: both;
+            height: 0;
+        }
+
+        .worksheetWithCode {
+            margin: 20px;
+        }
+
+        .worksheetWithCode .worksheet, .worksheetWithCode .code {
+            float: left;
+            margin-right: 30px;
+        }
+
+        table.definitions {
+            border: 2px solid gray;
+            border-collapse: collapse;
+            margin: 20px 50px;
+        }
+
+        table.definitions td {
+            border: 2px solid gray;
+            padding: 5px;
+        }
+
+        table.definitions tr td:first-child {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Freesheet for Programmers</h1>
+
+    <p>Freesheet is a language designed to be so simple that people with no programming experience can learn to use it.
+        But it is also powerful enough for real applications built by real programmers.
+        This is a fast-paced introduction for experienced programmers that explains how to program in Freesheet and also
+        how to embed it in your applications.</p>
+
+    <h2>Freesheet in a nutshell</h2>
+
+    <p>
+        Freesheet is a <em>functional-like</em><sup>*</sup> language where everything is an expression or a function
+        definition.
+        There is no control-flow &mdash; just named expressions that can can use the values of other expressions.
+        There are no input/output statements. You can define a named input, and any named expression
+        is available as an output. How the inputs arrive and how the outputs are consumed is up to the <strong>host
+        application</strong>
+        in which it is embedded. The current implementation of Freesheet is written in Coffeescript, so the host
+        application can be JavaScript
+        running in the browser or in node.js.</p>
+
+    <p class="note" id="functional_like">
+        * "Functional-like" because it has some of the characteristics of functional programming languages,
+        but it is in no way trying to compete with the likes of Haskell. It doesn't even have explicit types...
+    </p>
+
+
+    <h2>It's live</h2>
+
+    <p>
+        You don't just run a Freesheet program, give it a set of inputs, get the outputs and finish.
+        Once started, a Freesheet program runs continuously, re-evaluating the outputs every time an input changes.
+    </p>
+
+    <h2>What does it look like?</h2>
+
+    <h3>Text form</h3>
+
+    <p>
+        Freesheet programs can be written in plain text as a set of definitions of the form <code>name =
+        expression</code>. Expressions can refer to other names. For example:
+    </p>
+
+    <pre id="example1Code">
+        a = 10;
+        b = 20;
+        c = a + b;
+    </pre>
+
+
+    <h3>The worksheet</h3>
+
+    <p>
+        The simple structure fits well into a table, so Freesheet comes with a worksheet tool which shows the name and
+        definition along with the current value:
+    </p>
+
+    <div data-sheetname="example1">
+        name = "World";
+        greeting = "Hello " + name + "!";
+    </div>
+
+
+    <p>You can edit the program in the worksheet and see the updates immediately &mdash; try double-clicking a Formula
+        cell and changing the expression.</p>
+
+    <h2>The language</h2>
+
+    <h3>Types and Literals</h3>
+
+    <p>Types are not defined explicitly in Freesheet, but they do exist - like in JavaScript.
+    </p>
+
+    <p>
+        Literal values are written like this:
+    </p>
+
+
+    <div data-sheetname="example2">
+        string = "Hello!";
+        number = 25.5;
+        date = dateValue("2015-10-31");
+        list = ["List", "of", 4, "items"];
+        group = {name: "Fred", score: 100};
+        nullValue = none;
+    </div>
+    <p>The <em>group</em> type is a set of name-expression pairs that is like a map, hash, dictionary, object, lookup or
+        whatever in other languages.</p>
+
+
+    <h3>Simple expressions</h3>
+
+    <p>There are operators for: </p>
+    <table class="definitions">
+        <tr>
+            <td>Arithmetic</td>
+            <td>+ - * /</td>
+        </tr>
+        <tr>
+            <td>Comparisons</td>
+            <td>== <> > < >= <=</td>
+        </tr>
+        <tr>
+            <td>Logical</td>
+            <td>and or</td>
+        </tr>
+    </table>
+    <p>They have the same precedence as in most languages, and you can use brackets to override that.</p>
+
+    <p>The <code>+</code> operator also: </p>
+    <ul>
+        <li>concatenates strings</li>
+        <li>concatenates arrays</li>
+        <li>merges groups</li>
+        <li>adds time periods to dates</li>
+    </ul>
+
+    <div data-sheetname="example3">
+        a = 10;
+        b = 20;
+        p = (a + 5) * b - 1;
+        q = b == a;
+        r = b > a and ("x" == "y" or a == 10);
+    </div>
+
+    <h3>Function calls</h3>
+
+    <p>
+        Freesheet expressions can call functions. Some core functions come with Freesheet (like <code>ifElse</code> and
+        <code>sum</code>).
+        The host application can provide further functions (like <code>addFortyTwo</code> in the example below).
+        A Freesheet program can also define its own functions - more on that later.
+    </p>
+
+    <div data-sheetname="example4">
+        scores = [10, 17, 4, 31];
+        total = sum(scores);
+        bonusPoints = ifElse(count(scores) > 3, 20, 0);
+        finalScore = addFortyTwo(total + bonusPoints);
+    </div>
+
+    <h2>Input, Output and the Host Application</h2>
+
+    <p>
+        Ok - no program is much use unless you can get data in and out. To get data into a Freesheet program, you have to define a named input.
+        Then the host application can send data to that input.  The host application can also register callbacks for changes in the outputs (any named expression can be an output).
+    </p>
+    <p>
+        Here is a simple Freesheet program with an input, <code>name</code>.  The host application (this web page) sends an input every time the value in the textbox changes.
+        It also registers a callback for changes in <code>greeting</code> and displays that in the page.
+    </p>
+
+    <h4>Hello You</h4>
+    <div data-sheetname="exampleInput">
+        name = input;
+        greeting = "Hello " + name + "!";
+    </div>
+
+    <div>
+        <label>What is your name?</label>
+        <input type="text" id="yourName" placeholder="Enter your name here"/>
+        <span id="greeting"></span>
+    </div>
+
+    <h4>JavaScript code</h4>
+    <div data-sourceid="exampleInputScript"></div>
+
+
+    <h2>Other points</h2>
+
+    <p>Expressions are separated by semi-colons and can be written over multiple lines.</p>
+
+
+</div>
+
+<script>
+    var Freesheet = require('freesheet-web');
+    var TableWorksheet = require('table-worksheet');
+    var CoreFunctions = require('core-functions')
+    var TimeFunctions = require('time-functions')
+
+
+    $(function () {
+        $('[data-sheetname]').each(function (i, e) {
+            var el = $(e);
+            var sheetName = el.attr('data-sheetname');
+            var code = el.text();
+            el.empty();
+            var tableEl = $('<div class="worksheet"></div>').appendTo(el);
+            var sheet = Freesheet.createSheet(sheetName);
+            sheet.addFunctions(CoreFunctions);
+            sheet.addFunctions(TimeFunctions);
+            sheet.addFunctions({
+                addFortyTwo: function (x) {
+                    return x + 42;
+                }
+            });
+
+            var worksheet = new TableWorksheet(tableEl, sheet);
+            worksheet.loadText(code);
+            $('<pre class="freesheet-code">' + code + '</pre>').appendTo(el);
+            el.addClass('worksheetWithCode group');
+        });
+    });
+
+</script>
+
+<script id="exampleInputScript">
+    $(function() {
+        var sheet = Freesheet.sheets('exampleInput');
+        $('#yourName').on('input', function(ev) {
+            var newName = $(ev.target).val();
+            sheet.input('name', newName)
+        });
+        sheet.onValueChange(function(name, val) {
+            $('#' + name).html(val);
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $('[data-sourceid]').each(function (i, e) {
+            var el = $(e);
+            var scriptId = el.attr('data-sourceid');
+            var code = $('#' + scriptId).text();
+            $('<pre>' + code + '</pre>').appendTo(el);
+        });
+    });
+
+</script>
+
+</body>
+</html>
