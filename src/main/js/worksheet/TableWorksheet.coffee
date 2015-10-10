@@ -105,7 +105,7 @@ class TableWorksheet
     }
     @_handleEvents()
     @_rebuildTable()
-    @renderQueue.debounce(500).subscribe () => @table.render()
+    @renderQueue.subscribe () => @table.render()
 
   _handleEvents: ->
     self = this

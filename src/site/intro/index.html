@@ -27,6 +27,7 @@
 
         pre.freesheet-code {
             white-space: pre-line;
+            display: table-cell;
         }
 
         .note {
@@ -53,18 +54,21 @@
         }
 
         table.definitions {
-            border: 2px solid gray;
-            border-collapse: collapse;
+            width: inherit;
             margin: 20px 50px;
         }
 
         table.definitions td {
-            border: 2px solid gray;
-            padding: 5px;
+            min-width: 5em;
         }
 
         table.definitions tr td:first-child {
             font-weight: bold;
+        }
+
+
+        .invoice table, .totals table td:nth-child(2) {
+            text-align: right;
         }
     </style>
 </head>
@@ -72,9 +76,13 @@
 <div class="container">
     <h1>Freesheet for Programmers</h1>
 
-    <p>Freesheet is a language designed to be so simple that people with no programming experience can learn to use it.
-        But it is also powerful enough for real applications built by real programmers.
-        This is a fast-paced introduction for experienced programmers that explains how to program in Freesheet and also
+    <p>Freesheet is a language designed to be </p>
+    <ul>
+        <li>simple enough for people with no programming experience to learn to use it</li>
+        <li>powerful enough for real applications built by professional programmers</li>
+    </ul>
+    <p>
+    This is a fast-paced introduction for experienced programmers that explains how to program in Freesheet and also
         how to embed it in your applications.</p>
 
     <h2>Freesheet in a nutshell</h2>
@@ -82,7 +90,7 @@
     <p>
         Freesheet is a <em>functional-like</em><sup>*</sup> language where everything is an expression or a function
         definition.
-        There is no control-flow &mdash; just named expressions that can can use the values of other expressions.
+        There is no control-flow &mdash; just named expressions that can use the values of other expressions.
         There are no input/output statements. You can define a named input, and any named expression
         is available as an output. How the inputs arrive and how the outputs are consumed is up to the <strong>host
         application</strong>
@@ -126,14 +134,14 @@
         definition along with the current value:
     </p>
 
-    <div data-sheetname="example1">
+    <div data-sheetname="example1" data-showcode>
         name = "World";
         greeting = "Hello " + name + "!";
     </div>
 
 
-    <p>You can edit the program in the worksheet and see the updates immediately &mdash; try double-clicking a Formula
-        cell and changing the expression.</p>
+    <p>You can edit the program in the worksheet and see the updates immediately.  Just click or double-click a Name or Formula
+        cell in the table above (or any other example on this page).</p>
 
     <h2>The language</h2>
 
@@ -147,7 +155,7 @@
     </p>
 
 
-    <div data-sheetname="example2">
+    <div data-sheetname="example2" data-showcode>
         string = "Hello!";
         number = 25.5;
         date = dateValue("2015-10-31");
@@ -162,7 +170,7 @@
     <h3>Simple expressions</h3>
 
     <p>There are operators for: </p>
-    <table class="definitions">
+    <table class="definitions table table-bordered">
         <tr>
             <td>Arithmetic</td>
             <td>+ - * /</td>
@@ -186,7 +194,7 @@
         <li>adds time periods to dates</li>
     </ul>
 
-    <div data-sheetname="example3">
+    <div data-sheetname="example3" data-showcode>
         a = 10;
         b = 20;
         p = (a + 5) * b - 1;
@@ -203,7 +211,7 @@
         A Freesheet program can also define its own functions - more on that later.
     </p>
 
-    <div data-sheetname="example4">
+    <div data-sheetname="example4" data-showcode>
         scores = [10, 17, 4, 31];
         total = sum(scores);
         bonusPoints = ifElse(count(scores) > 3, 20, 0);
@@ -222,7 +230,7 @@
     </p>
 
     <h4>Hello You</h4>
-    <div data-sheetname="exampleInput">
+    <div data-sheetname="exampleInput" data-showcode>
         name = input;
         greeting = "Hello " + name + "!";
     </div>
@@ -236,6 +244,157 @@
     <h4>JavaScript code</h4>
     <div data-sourceid="exampleInputScript"></div>
 
+    <h2>Functions that operate on lists</h2>
+    <p>Some functions operate on lists, applying an expression to each one:</p>
+    <ol>
+        <li><code>fromEach</code> - returns a list that is the result of applying an expression to each item (aka map, each in other languages)</li>
+        <li><code>select</code> - returns a list that contains the elements where the expression returns true (aka filter in other languages)</li>
+    </ol>
+    <p>The expression uses the special name <code>in</code> to refer to the current item.</p>
+
+    <h4>List operations</h4>
+    <div data-sheetname="exampleList">
+        highScoreThreshold = 10;
+        scores = [{name: "Abby", points: 10},
+                  {name: "Billy",  points: 5},
+                  {name: "Carys", points: 15}];
+        highScores = select(scores, in.points >= highScoreThreshold);
+        highScorers = fromEach(highScores, in.name);
+    </div>
+    <p><em>Note:</em> these expressions look simple so non-programmers are not scared off, but the functional programmers
+    will recognise that these are higher-order functions being passed a lambda expression that acts a bit like a closure.
+    The expression reacts to changes in the values it uses - try changing <code>highScoreThreshold</code> to 5 or 12 in the example.
+        The lambda expression and all the expressions that depend on it are recalculated.
+        Not really so simple underneath.</p>
+
+    <h2>So far, so Excel-lent</h2>
+    <p>At this point you might ask - can't most of what we have seen so far can be done in a spreadsheet?  Well, yes - some of it can.
+    And FreeSheet is deliberately presented in a spreadsheet-like style to make it more approachable to non-programmers.  But a spreadsheet can't:</p>
+    <ul>
+        <li>receive new inputs and notify changes in the outputs</li>
+        <li>be embedded in a web page</li>
+        <li>have complex types like lists and groups in cells</li>
+        <li>show a name, formula and value all together in the same place</li>
+    </ul>
+    <p>But the big difference is something else...</p>
+
+    <h2>Events over time</h2>
+    <p>A spreadsheet just shows you a static calculation.  If you change the value in a cell, the sheet updates and the previous value, or even the fact that it arrived, is lost.
+    In FreeSheet, inputs and the calculated expressions are regarded as streams of events.
+        Every time a new input is received, any expression that depends on it is recalculated and outputs a new event.
+    </p>
+
+    <p>You may just be interested in the fact that an input event has arrived, rather than it's value.  A button click would be a good example of this.</p>
+
+    <p>
+        Or you can do calculations with the whole sequence of values that an expression has had since the program started running.
+        To get a sequence of values, you use the <code>all</code> function.
+    </p>
+
+    <h3>Tracking Sales</h3>
+    <p>In this example we have several inputs, but we want to capture the details of a sale only when all the details are entered and a button is clicked.
+        We also want to calculate the total amounts from the sales over the day.  We use:
+    </p>
+    <ul>
+        <li>the <code>onChange</code> function to react to the event of clicking a button and snapshot the values of the other inputs as a complete sale</li>
+        <li>the <code>all</code> function to do calculations over the list of all sales</li>
+    </ul>
+
+    <p>Enter two or three sales and see what happens.</p>
+    <div data-sheetname="sales">
+        taxRate = 0.2;
+        customerIn = input;
+        partsIn = input;
+        labourIn = input;
+        recordSale = input;
+        customer = onChange(recordSale, customerIn);
+        parts = onChange(recordSale, asNumber(partsIn));
+        labour = onChange(recordSale, asNumber(labourIn));
+        subTotal = parts + labour;
+        tax = subTotal * taxRate;
+        totalToPay = subTotal + tax;
+        grossSales = sum(all(totalToPay));
+        totalTax = sum(all(tax));
+    </div>
+
+    <div>
+        <form id="salesForm" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Customer Name</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" name="customer" placeholder="A Buyer">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Parts</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" name="parts" placeholder="Cost of the parts">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Labour</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" name="labour" placeholder="Cost of the labour">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-2">
+                    <button type="submit" name="recordSale" class="btn btn-default">Record Sale</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="invoice">
+        <h2>Invoice</h2>
+        <table class="definitions  table table-bordered">
+            <tr>
+                <td>Parts</td>
+                <td><span id="parts"></span></td>
+            </tr>
+            <tr>
+                <td>Labour</td>
+                <td><span id="labour"></span></td>
+            </tr>
+            <tr>
+                <td>Sub-total</td>
+                <td><span id="subTotal"></span></td>
+            </tr>
+            <tr>
+                <td>Tax</td>
+                <td><span id="tax"></span></td>
+            </tr>
+            <tr>
+                <td>Total to Pay</td>
+                <td><span id="totalToPay"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="totals">
+        <h2>Running Totals</h2>
+        <table class="definitions  table table-bordered">
+            <tr>
+                <td>Gross Sales</td>
+                <td><span id="grossSales"></span></td>
+            </tr>
+            <tr>
+                <td>Total Tax</td>
+                <td><span id="totalTax"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Functions that operate on event streams</h2>
+    <p>Some functions act on the whole stream of events from an expression rather than individual values, and return another event stream.
+    The new stream might have more or fewer events than the incoming stream(s).  Some useful ones are:</p>
+    <ul>
+        <li><code>merge</code> - merge two streams into one</li>
+        <li><code>unpackLists</code> - take a stream of lists and output every value of each list individually</li>
+        <li><code>onChange</code> - when there is a new value in one stream, take the current value of another</li>
+    </ul>
+
+    <h2>Defining your own functions</h2>
 
     <h2>Other points</h2>
 
@@ -269,7 +428,13 @@
 
             var worksheet = new TableWorksheet(tableEl, sheet);
             worksheet.loadText(code);
-            $('<pre class="freesheet-code">' + code + '</pre>').appendTo(el);
+
+            if (el.is('[data-showcode]')) {
+                var codeBox = $('<pre class="freesheet-code">' + code + '</pre>').appendTo(el);
+                sheet.onFormulaChange(function () {
+                    codeBox.text(sheet.text());
+                });
+            }
             el.addClass('worksheetWithCode group');
         });
     });
@@ -279,12 +444,16 @@
 <script id="exampleInputScript">
     $(function() {
         var sheet = Freesheet.sheets('exampleInput');
+
+        // observe changes in the text box with jQuery and send the text to the sheet's 'name' input
         $('#yourName').on('input', function(ev) {
             var newName = $(ev.target).val();
             sheet.input('name', newName)
         });
-        sheet.onValueChange(function(name, val) {
-            $('#' + name).html(val);
+
+        // observe changes in the 'greeting' expression on the sheet and update the display element
+        sheet.onValueChange('greeting', function(name, val) {
+            $('#greeting').html(val);
         });
     });
 </script>
@@ -300,6 +469,28 @@
     });
 
 </script>
+
+<script>
+    // sales example
+    $(function() {
+        var sheet = Freesheet.sheets('sales');
+
+        $('#salesForm').on('change', function(ev) {
+            var name = $(ev.target).attr('name') + 'In';
+            var val = $(ev.target).val();
+            sheet.input(name, val)
+        });
+        $('#salesForm').on('submit', function(ev) {
+            sheet.input('recordSale', Date.now());
+            ev.preventDefault();
+        });
+
+        sheet.onValueChange(function(name, val) {
+            $('.invoice, .totals').find('#' + name).html(val);
+        });
+    });
+</script>
+
 
 </body>
 </html>
