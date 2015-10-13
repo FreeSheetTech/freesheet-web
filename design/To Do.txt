@@ -40,7 +40,7 @@ To Do
 Bugs
 ----
 - Boolean false shows up as empty cell
-- Is there a time delay on updating the sheet?
+    - Is there a time delay on updating the sheet?
 - If mistake in function definition, gets very confused
 - If paste in formula with new lines, spreads it over several cells/rows
 - Worksheet value display expands as value display tables get bigger - or make draggable

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../main/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../main/css/bootstrap-theme.css"/>
+    <title></title>
+    <style>
+        body {
+            font-size: 16px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 40px;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-top: 30px;
+
+        }
+    </style>
+    <title>FreeSheet</title>
+
+</head>
+<body>
+<div class="container">
+    <article class="" itemprop="mainContentOfPage">
+        <h1><a id="user-content-freesheet"
+               class="anchor" href="#freesheet"
+               aria-hidden="true"></a>FreeSheet
+        </h1>
+
+        <h2>What is FreeSheet?</h2>
+        <p>FreeSheet is a really simple functional-style programming language.<br>
+            It is intended to be easy enough to be usable by people without programming experience,
+            but also powerful enough to use in a wide range of applications.</p>
+
+        <p>A FreeSheet program is easy to write and understand because it is just a list of names and formulas.
+            You can enter the names and formulas in a worksheet, and see the results immediately - so debugging is easy.
+            The results also update continuously as new inputs arrive.
+        </p>
+
+        <p>Right now, you can use FreeSheet programs in web pages to make simple, powerful browser applications ranging from games to business systems.
+        You will soon also be able to have FreeSheet programs running on the server as web services.</p>
+
+        <h2>More information</h2>
+        <ul>
+            <li><a href="#technical_overview">Technical Overview</a> in this page</li>
+            <li><a href="freesheet-for-programmers.html">Guide for programmers</a></li>
+            <li>
+                <span>The <a href="https://github.com/FreeSheetTech">GitHub repositories</a>.</span>
+                <ul>
+                    <li><a href="https://github.com/FreeSheetTech/freesheet">Core FreeSheet on Github</a></li>
+                    <li><a href="https://github.com/FreeSheetTech/freesheet-web">FreeSheet web on Github</a></li>
+
+                </ul>
+            </li>
+
+        </ul>
+        <p>More examples and tutorials for non-programmers are coming soon.</p>
+
+        <h2 id="technical_overview">Technical Overview</h2>
+
+
+        <p>A FreeSheet program is just a list of names and definitions.
+            Functions with no arguments are called 'named values', and they are evaluated continuously.
+            Functions with arguments are only evaluated when they are used in the definitions of other functions.</p>
+
+        <p>A function definition is an expression which can use:</p>
+
+        <ul>
+            <li>literals for simple types, lists and objects</li>
+            <li>arithmetic and logical operators</li>
+            <li>function calls</li>
+        </ul>
+
+        <p>FreeSheet can be written as plain text, but the simple 'name = expression' format
+            means it can also be displayed in a table.<br>
+            The associated <a href="https://github.com/FreeSheetTech">freesheet-web</a> project provides tools for
+            editing FreeSheet programs in a spreadsheet-like
+            table,
+            which also displays the current value of each named value.</p>
+
+        <p>A larger FreeSheet application would probably be organised into multiple separate worksheets to make it
+            easier to
+            understand.
+            A worksheet can reference values in other worksheets.</p>
+
+        <p>As well as functions defined in the worksheet by the user, the worksheet can provide pre-defined functions.
+            FreeSheet provides a number of generally useful functions, but an application can easily add new pre-defined
+            functions (written in JavaScript).</p>
+
+        <h3><a id="user-content-reactivity" class="anchor" href="#reactivity" aria-hidden="true"></a>Reactivity</h3>
+
+        <p>A really important point about FreeSheet programs is that they don't just run and then stop.
+            When started, they wait for inputs and continuously update all their named values as new inputs arrive.
+            They also update named values if function definitions are changed while the program is running.
+            Other parts of the application can easily register to be notified of these changes.</p>
+
+        <h3><a id="user-content-implementation" class="anchor" href="#implementation" aria-hidden="true"></a>Implementation
+        </h3>
+
+        <p>FreeSheet is written in Coffeescript. It uses many open source libraries, notably Pegjs for parsing and Rx JS
+            for the reactive functionality.</p>
+
+        <p>The <a href="https://github.com/FreeSheetTech/freesheet">core freesheet project</a> can parse freesheet
+            programs from text,
+            and run a set of worksheets. </p>
+
+        <p>The <a href="https://github.com/FreeSheetTech/freesheet-web">freesheet web project</a> provides tools and
+            components
+            for running FreeSheet in web pages.
+        </p>
+
+        <h3><a id="user-content-suitability-for-non-technical-users" class="anchor"
+               href="#suitability-for-non-technical-users" aria-hidden="true"></a>Non-technical users</h3>
+
+        <p>Being easy to learn and use for non-technical people was a key design aim of FreeSheet.
+            The goal is that people who can use formulas with functions in a spreadsheet should be able to start
+            programming in FreeSheet in an hour or so.
+            Among the characteristics that contribute to this are:</p>
+
+        <ul>
+            <li>Very simple syntax with just functions and expressions</li>
+            <li>Worksheet tools to edit and run FreeSheet programs that are similar to spreadsheets</li>
+            <li>Continuous evaluation of expressions while running</li>
+            <li>Being able to see the current values of expressions all the time</li>
+        </ul>
+
+
+
+
+    </article>
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo Building freesheet-web
+npm install
+./buildDependencies.sh
+./compile.sh
+./test.sh
+./buildDistJs.sh
+
+echo Build freesheet-web completed

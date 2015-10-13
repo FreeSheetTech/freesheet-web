@@ -1,8 +1,7 @@
 .idea/
 *.iml
 *.map
-src/main/js/**/*.js
-src/test/**/*.js
+target/
 dist/
 scratch/
 node_modules/

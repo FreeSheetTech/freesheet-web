@@ -1,46 +1,58 @@
 #!/bin/bash
 
-DIST_FILE=dist/freesheet-web.js
-DIST_DIR=$(dirname $DIST_FILE)
+DIST_DIR=dist
+DIST_JS_FILE=$DIST_DIR/freesheet-web.js
+ALL_JS_FILE=$DIST_DIR/freesheet-all.js
+DIST_CSS_FILE=$DIST_DIR/freesheet.css
 FSW_FILE=$DIST_DIR/fsw.js
 METEOR_FILE=$DIST_DIR/meteor-lite.js
 
-echo Building distribution file $DIST_FILE
+echo Building distribution files
 
 mkdir -p $DIST_DIR
 
 cat \
-    ./src/main/js/template/meteor-skeleton.js \
-    ./src/main/js/template/underscore.js \
-    ./src/main/js/template/tracker.js \
-    ./src/main/js/template/htmljs.js \
-    ./src/main/js/template/html-tools.js \
-    ./src/main/js/template/reactive-var.js \
-    ./src/main/js/template/id-map.js \
-    ./src/main/js/template/base64.js \
-    ./src/main/js/template/ejson.js \
-    ./src/main/js/template/minimongo.js \
-    ./src/main/js/template/observe-sequence.js \
-    ./src/main/js/template/blaze.js \
-    ./src/main/js/template/blaze-tools.js \
-    ./src/main/js/template/templating.js \
-    ./src/main/js/template/spacebars-compiler.js \
-    ./src/main/js/template/spacebars.js \
-    ./src/main/js/template/reactive-dict.js \
+    ./lib/js/template/meteor-skeleton.js \
+    ./lib/js/template/underscore.js \
+    ./lib/js/template/tracker.js \
+    ./lib/js/template/htmljs.js \
+    ./lib/js/template/html-tools.js \
+    ./lib/js/template/reactive-var.js \
+    ./lib/js/template/id-map.js \
+    ./lib/js/template/base64.js \
+    ./lib/js/template/ejson.js \
+    ./lib/js/template/minimongo.js \
+    ./lib/js/template/observe-sequence.js \
+    ./lib/js/template/blaze.js \
+    ./lib/js/template/blaze-tools.js \
+    ./lib/js/template/templating.js \
+    ./lib/js/template/spacebars-compiler.js \
+    ./lib/js/template/spacebars.js \
+    ./lib/js/template/reactive-dict.js \
   > $METEOR_FILE
 
 node_modules/.bin/browserify -o $FSW_FILE \
   -x freesheet -x freesheet-errors -x core-functions -x time-functions \
-  -r ./src/main/js/web/FreesheetWeb.js:freesheet-web \
-  -r ./src/main/js/web/PageInputs.js:page-inputs \
-  -r ./src/main/js/worksheet/FileUtils.js:file-utils \
-  -r ./src/main/js/worksheet/TableWorksheet.js:table-worksheet \
-  -r ./src/main/js/template/reactive-dict.js \
-  -r ./src/main/js/template/ReactiveTemplate.js:reactive-template
+  -r ./target/coffeejs/web/FreesheetWeb.js:freesheet-web \
+  -r ./target/coffeejs/web/ReactiveTemplate.js:reactive-template \
+  -r ./target/coffeejs/web/PageInputs.js:page-inputs \
+  -r ./target/coffeejs/worksheet/FileUtils.js:file-utils \
+  -r ./target/coffeejs/worksheet/TableWorksheet.js:table-worksheet \
+  -r ./lib/js/template/reactive-dict.js
 
 cat \
-    ./src/main/js/lib/handsontable.full.js \
-    ./src/main/js/lib/FileSaver.js \
+    ./lib/js/handsontable.full.js \
+    ./lib/js/FileSaver.js \
     $METEOR_FILE \
     $FSW_FILE \
-  > $DIST_FILE
+  > $DIST_JS_FILE
+
+cat \
+    $DIST_DIR/freesheet.js \
+    $DIST_JS_FILE \
+  > $ALL_JS_FILE
+
+cat \
+    ./src/main/css/freesheet-web.css \
+    ./src/main/css/freesheet-edit.css \
+  > $DIST_CSS_FILE

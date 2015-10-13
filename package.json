@@ -2,14 +2,15 @@
   "name": "freesheet-web",
   "version": "0.1.0",
   "description": "UI for Freesheet",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/boocockp/freesheet-web.git"
+    "url": "https://github.com/FreeSheetTech/freesheet-web.git"
   },
-  "homepage": "https://github.com/boocockp/freesheet-web",
+  "homepage": "https://github.com/FreeSheetTech/freesheet-web",
   "dependencies": {
     "lodash": "^3.3.1"
   },
