@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../main/css/bootstrap.css"/>
-    <link rel="stylesheet" href="../main/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="../../lib/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../../lib/css/bootstrap-theme.css"/>
     <title></title>
     <style>
         body {
@@ -36,13 +36,28 @@
         </ul>
         <h2>Installation</h2>
         <p>We are working on easier installation, but for now it's download and build.  You will need <a
-                href="https://nodejs.org">node.js (including npm)</a> installed.</p>
+                href="https://git-scm.com/downloads">git</a> and  <a
+                href="https://nodejs.org">node.js</a> installed.
+        </p>
         <ul>
             <li>Clone the two Git repositories <a href="https://github.com/FreeSheetTech/freesheet">freesheet</a> and
                 <a href="https://github.com/FreeSheetTech/freesheet-web">freesheet-web</a>under the same parent directory</li>
             <li>Get dependencies in each one</li>
             <li>Run the build in each one</li>
             <li>Copy the JavaScript and CSS bundles to your project</li>
+        </ul>
+
+        <p>These commands should do what is needed:</p>
+        <pre>
+            git clone https://github.com/FreeSheetTech/freesheet.git
+            git clone https://github.com/FreeSheetTech/freesheet-web.git
+            (cd freesheet-web && ./build)
+        </pre>
+
+        <h3>Possible problems</h3>
+        <ul>
+            <li>If there are permissions errors from npm install, either use sudo or check this Stackoverflow question
+                <a href="http://stackoverflow.com/questions/16151018/npm-throws-error-without-sudo">NPM throws error without sudo</a>.</li>
         </ul>
     </div>
 
