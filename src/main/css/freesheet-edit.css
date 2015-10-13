@@ -1,3 +1,5 @@
+/* Freesheet editing page styles */
+
 body {
     font-family: Helvetica, Arial, Verdana, sans-serif;
 }
@@ -49,3 +51,4 @@ h1 {
     cursor: inherit;
     display: block;
 }
+

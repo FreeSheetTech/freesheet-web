@@ -1,3 +1,5 @@
+/* Freesheet worksheet and templated page styles */
+
 body {
     font-family: Helvetica, Arial, Verdana, sans-serif;
 }
@@ -64,3 +66,4 @@ table.value td {
 .handsontable td {
     padding: 5px 8px;
 }
+

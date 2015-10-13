@@ -3,7 +3,7 @@
 DIST_DIR=dist
 DIST_JS_FILE=$DIST_DIR/freesheet-web.js
 ALL_JS_FILE=$DIST_DIR/freesheet-all.js
-DIST_CSS_FILE=$DIST_DIR/freesheet.css
+DIST_CSS_FILE=$DIST_DIR/freesheet-all.css
 FSW_FILE=$DIST_DIR/fsw.js
 METEOR_FILE=$DIST_DIR/meteor-lite.js
 
@@ -55,4 +55,5 @@ cat \
 cat \
     ./src/main/css/freesheet-web.css \
     ./src/main/css/freesheet-edit.css \
+    ./lib/css/handsontable.full.css \
   > $DIST_CSS_FILE

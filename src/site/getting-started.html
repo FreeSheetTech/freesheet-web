@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../../lib/css/bootstrap.css"/>
     <link rel="stylesheet" href="../../lib/css/bootstrap-theme.css"/>
-    <title></title>
     <style>
         body {
             font-size: 16px;
@@ -24,7 +23,7 @@
 
         }
     </style>
-    <title></title>
+    <title>Getting Started with Freesheet</title>
 </head>
 <body>
     <div class="container">
@@ -35,7 +34,7 @@
             <li><a href="https://github.com/FreeSheetTech/freesheet-web">FreeSheet Web</a> which helps you use the core runner in a web page and see the program in a worksheet</li>
         </ul>
         <h2>Installation</h2>
-        <p>We are working on easier installation, but for now it's download and build.  You will need <a
+        <p>Easier installation is in the works, but for now it's download and build.  You will need <a
                 href="https://git-scm.com/downloads">git</a> and  <a
                 href="https://nodejs.org">node.js</a> installed.
         </p>
@@ -47,18 +46,45 @@
             <li>Copy the JavaScript and CSS bundles to your project</li>
         </ul>
 
-        <p>These commands should do what is needed:</p>
+        <p>These commands should download and build both repos:</p>
         <pre>
             git clone https://github.com/FreeSheetTech/freesheet.git
             git clone https://github.com/FreeSheetTech/freesheet-web.git
             (cd freesheet-web && ./build)
         </pre>
 
-        <h3>Possible problems</h3>
+        <p>Then copy the output files to your project eg:</p>
+        <pre>
+            cp freesheet-web/dist/freesheet-all.js my-project-dir/js
+            cp freesheet-web/dist/freesheet-all.css my-project-dir/css
+        </pre>
+
+
+        <h4>Possible problems</h4>
         <ul>
             <li>If there are permissions errors from npm install, either use sudo or check this Stackoverflow question
                 <a href="http://stackoverflow.com/questions/16151018/npm-throws-error-without-sudo">NPM throws error without sudo</a>.</li>
         </ul>
+
+        <h2>Using FreeSheet in a web page</h2>
+        <p>
+            Include the js and css files from the build in the head of your page eg:
+        </p>
+        <pre>
+            &lt;link rel="stylesheet" href="/css/freesheet-all.css"/&gt;
+            &lt;script src="/js/freesheet-all.js"&gt;&lt;/script&gt;
+        </pre>
+        <p>You will also need to include <a href="https://jquery.com/download/">jQuery</a>.</p>
+
+        <p>Get a reference to the FreeSheet object:</p>
+        <pre>
+            &lt;script&gt;var FreeSheet = require('freesheet-web')&lt;/script&gt;
+        </pre>
+
+        <p>The <a href="https://github.com/FreeSheetTech/freesheet-web/tree/master/src/examples">examples directory of the Freesheet Web repo</a>
+            is the best place to see what you can do with FreeSheet.
+        More documentation coming...</p>
+
     </div>
 
 </body>
